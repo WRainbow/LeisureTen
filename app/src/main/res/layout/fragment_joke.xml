@@ -1,0 +1,42 @@
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/jokefragment_srefreshl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.srainbow.leisureten.fragment.PictureFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/jokefragment_content_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+        </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/jokefragment_load_failed_llayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_load_failed" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="15sp"
+                android:text="@string/loadFailed"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</android.support.v4.widget.SwipeRefreshLayout>
