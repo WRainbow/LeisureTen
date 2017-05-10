@@ -73,16 +73,42 @@ public class HtmlParserWithJSoup {
 
     public List<ImgWithAuthor> parserHtmlForImgWithAuthor(String url) {
         List<ImgWithAuthor> imgWithAuthorList = new ArrayList<>();
+        int pre = 0, next = 0;
+        String preUrl = "", nextUrl = "";
         if (url != null) {
             try {
                 Document doc = Jsoup.connect(url).get();
                 Element content = doc.select("div.container").select("div.sticky_wrap")
                         .select("div.content").first();
                 Elements items = content.select("div.item_wrap");
+                Element navigation = content.select("div.navigation").first();
+                //判断是否存在上一页
+                if(navigation.select("div.previous").first().text() == null ||
+                        navigation.select("div.previous").first().text().length() == 0){
+                    pre = 0;
+                    Log.e("msg", "nonPre");
+                }else{
+                    pre = 1;
+                    preUrl = navigation.select("div.previous").first().select("a").attr("href");
+                    Log.e("msg", preUrl);
+                }
+                //判断是否存在下一页
+                if(navigation.select("div.next").first().text() == null ||
+                        navigation.select("div.next").first().text().length() == 0){
+                    next = 0;
+                    Log.e("msg", "nonNext");
+                }else{
+                    next = 1;
+                    nextUrl = navigation.select("div.next").first().select("a").attr("href");
+                    Log.e("msg", nextUrl);
+                }
                 for (Element ele : items) {
                     String imgUrl = ele.getElementsByClass("img_wrap").select("a").select("img").attr("src");
                     String author = ele.select("p").select("a").text();
-                    imgWithAuthorList.add(new ImgWithAuthor(imgUrl, author));
+                    ImgWithAuthor imgWithAuthor = new ImgWithAuthor(imgUrl, author, next, pre);
+                    imgWithAuthor.setPreUrl(preUrl);
+                    imgWithAuthor.setNextUrl(nextUrl);
+                    imgWithAuthorList.add(imgWithAuthor);
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -91,4 +117,9 @@ public class HtmlParserWithJSoup {
         Log.e("msg", "parserHtmlForImgWithAuthor Over");
         return imgWithAuthorList;
     }
+
+    public List<ImgWithAuthor> getNextPageImgWithAuthor(){
+        return parserHtmlForImgWithAuthor("");
+    }
+
 }

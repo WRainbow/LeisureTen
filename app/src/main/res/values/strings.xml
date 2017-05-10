@@ -14,11 +14,14 @@
     <string name="star">明星</string>
     <string name="temperament">气质</string>
     <string name="pullLoadMore">点击加载更多</string>
+    <string name="loading">正在加载……</string>
     <string name="dropFresh">下拉刷新</string>
     <string name="loadFailed">哎呀，数据跑丢了……</string>
     <string name="refreshFailed">请检查网络后再重试刷新</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="imgAuthor">拍摄者：%1$s</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="prePage">上一页</string>
+    <string name="nextPage">下一页</string>
 </resources>
