@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".activity.ContentShowActivity" />
         <activity android:name=".activity.BaseActivity" />
-        <activity android:name=".activity.DetailClassificationActivity"></activity>
+        <activity android:name=".activity.DetailClassificationActivity" />
+        <activity android:name=".activity.HDPictureShowActivity"></activity>
     </application>
 
 </manifest>

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
-import com.srainbow.leisureten.adapter.HDPictureRVAdapter;
+import com.srainbow.leisureten.adapter.HDPictureTagRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnTVWithUrlInRvClickToDoListener;
 import com.srainbow.leisureten.data.APIData.TagDetail;
 import com.srainbow.leisureten.util.Constant;
@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Bind(R.id.main_classification_hdload_tv)
     TextView mTvLoading;
 
-    private HDPictureRVAdapter mHDPictureRvAdapter;
+    private HDPictureTagRVAdapter mHDPictureRvAdapter;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private List<TagDetail> tagDetailList;
 
@@ -59,13 +59,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-//        initVar();
+        initVar();
         initViews();
     }
 
     public void initViews(){
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(6, 5);
-        mHDPictureRvAdapter = new HDPictureRVAdapter(this, tagDetailList);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        mHDPictureRvAdapter = new HDPictureTagRVAdapter(this, tagDetailList);
         mHDPictureRvAdapter.setOnItemClickListener(this);
         mRvHDTag.setAdapter(mHDPictureRvAdapter);
         mRvHDTag.setLayoutManager(staggeredGridLayoutManager);
@@ -134,6 +134,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    public void initRx(){
+        Observable.create(new Observable.OnSubscribe<List<TagDetail>>(){
+
+            @Override
+            public void call(Subscriber<? super List<TagDetail>> subscriber){
+
+            }
+        }).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<TagDetail>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<TagDetail> tagDetails) {
+
+                    }
+                });
     }
 
     @Override
@@ -205,6 +233,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onTvItemClick(View v, String url) {
-
+        Log.e("onTvItemClick", url);
+        Intent intent = new Intent(MainActivity.this, HDPictureShowActivity.class);
+        intent.putExtra("tagUrl", url);
+        startActivity(intent);
     }
 }

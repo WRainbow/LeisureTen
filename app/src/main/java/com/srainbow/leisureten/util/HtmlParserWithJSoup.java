@@ -67,7 +67,7 @@ public class HtmlParserWithJSoup {
         } catch (IOException e) {
             urlList.add(new TagDetail("error", e.getMessage()));
         }
-        Log.e("msg", "parserHtml Over");
+        Log.e("msg", "parserHtmlForTags Over");
         return urlList;
     }
 
@@ -88,6 +88,7 @@ public class HtmlParserWithJSoup {
                 System.out.println(e.getMessage());
             }
         }
+        Log.e("msg", "parserHtmlForImgWithAuthor Over");
         return imgWithAuthorList;
     }
 }

@@ -27,7 +27,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-
+//ShowApi图片显示
 public class DetailClassificationActivity extends BaseActivity{
 
     private static String classification = "";

@@ -15,6 +15,7 @@ import com.srainbow.leisureten.fragment.PictureFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+//趣图与笑话显示界面
 public class ContentShowActivity extends BaseActivity {
 
     private static String classification = "";
