@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
+import com.srainbow.leisureten.adapter.MyViewPagerAdapter;
 import com.srainbow.leisureten.data.APIData.ShowApiPicClassificationData;
 import com.srainbow.leisureten.data.APIData.ShowApiPicClassificationDetail;
 import com.srainbow.leisureten.data.APIData.TagDetail;
@@ -31,6 +32,7 @@ import rx.schedulers.Schedulers;
 public class DetailClassificationActivity extends BaseActivity{
 
     private static String classification = "";
+    private MyViewPagerAdapter myViewPagerAdapter;
 
     @Bind(R.id.detail_classification_tb)Toolbar mToobar;
     @Bind(R.id.detail_classification_tlayout)TabLayout mTabLayout;
@@ -71,13 +73,13 @@ public class DetailClassificationActivity extends BaseActivity{
                     showMessageByString("没有数据");
                 }else{
                     ShowApiPicClassificationDetail detail = ((ShowApiPicClassificationData)o).getShowapi_res_body();
-                    initTabLayout(detail);
+                    initViewPager(detail);
                 }
             }
         }));
     }
 
-    public void initTabLayout(ShowApiPicClassificationDetail detail){
+    public void initViewPager(ShowApiPicClassificationDetail detail){
         for(ShowApiPicClassificationDetail.AllClassification allClassification : detail.getList()){
             if(allClassification.getName().equals(classification)){
                 List<ShowApiPicClassificationDetail.Classification> classifications = allClassification.getList();
