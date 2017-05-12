@@ -8,6 +8,6 @@ import java.util.List;
  * Created by SRainbow on 2017/4/20.
  */
 
-public interface OnShowMoreIVInRvClickToDoListener {
-    void onIVItemClick(View v, List<String> imgUrlList);
+public interface OnItemWithParamClickListener {
+    void onItemWithParamClick(View v, Object o);
 }

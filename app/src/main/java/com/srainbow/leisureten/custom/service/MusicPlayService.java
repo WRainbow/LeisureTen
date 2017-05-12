@@ -143,7 +143,7 @@ public class MusicPlayService extends Service implements MediaPlayer.OnCompletio
                     break;
                 //随机播放
                 case 2:
-                    currentMusicPosition= BaseUtil.getRandomIndex(musicDetailList.size()-1);
+                    currentMusicPosition= BaseUtil.getInstance().getRandomIndex(musicDetailList.size()-1);
                     Intent intent=new Intent(Constant.CHANGE_MUSIC);
                     intent.putExtra("currentPosition",currentMusicPosition);
                     sendBroadcast(intent);

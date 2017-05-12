@@ -6,32 +6,29 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.adapter.MyViewPagerAdapter;
-import com.srainbow.leisureten.data.APIData.ShowApiPicClassificationData;
-import com.srainbow.leisureten.data.APIData.ShowApiPicClassificationDetail;
-import com.srainbow.leisureten.data.APIData.TagDetail;
-import com.srainbow.leisureten.fragment.BeatifulCollection.BeautifulCollectionBaseFragment;
+import com.srainbow.leisureten.data.APIData.showapi.picture_classification.Classification;
+import com.srainbow.leisureten.data.APIData.showapi.picture_classification.ClassificationDetail;
+import com.srainbow.leisureten.data.APIData.showapi.picture_classification.PictureClassificationResult;
+import com.srainbow.leisureten.data.APIData.showapi.picture_classification.PictureClassificationResultBody;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
-import com.srainbow.leisureten.util.Constant;
-import com.srainbow.leisureten.util.HtmlParserWithJSoup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 //ShowApi图片显示
 public class DetailClassificationActivity extends BaseActivity{
 
-    private static String classification = "";
+    private static String classificationName = "";
+    private List<ClassificationDetail> mClassificationId;
     private MyViewPagerAdapter myViewPagerAdapter;
 
     @Bind(R.id.detail_classification_tb)Toolbar mToobar;
@@ -45,26 +42,25 @@ public class DetailClassificationActivity extends BaseActivity{
         ButterKnife.bind(this);
         initParameter();
         initData();
-        showMessageByString("hello");
     }
 
     public void initParameter(){
-        classification = getIntent().getStringExtra("classificationName");
+        classificationName = getIntent().getStringExtra("classificationName");
+        mClassificationId = new ArrayList<>();
     }
 
     public void initData(){
-        mViewPager.setVisibility(View.GONE);
         RetrofitThing.getInstance().onShowApiPicClassificationResponse(new SubscriberByTag("load",
                 new SubscriberByTag.onSubscriberByTagListener() {
             @Override
             public void onCompleted(String tag) {
                 mTvLoad.setVisibility(View.GONE);
-                mViewPager.setVisibility(View.VISIBLE);
+                showMessageByString("load done");
             }
 
             @Override
             public void onError(String tag, Throwable e) {
-                Log.e("msg", e.getMessage());
+                Log.e("DetailActivityError", e.getMessage());
             }
 
             @Override
@@ -72,74 +68,26 @@ public class DetailClassificationActivity extends BaseActivity{
                 if(o == null){
                     showMessageByString("没有数据");
                 }else{
-                    ShowApiPicClassificationDetail detail = ((ShowApiPicClassificationData)o).getShowapi_res_body();
-                    initViewPager(detail);
+                    PictureClassificationResultBody resultBody = ((PictureClassificationResult)o).getShowapi_res_body();
+                    initViewPager(resultBody);
                 }
             }
         }));
     }
 
-    public void initViewPager(ShowApiPicClassificationDetail detail){
-        for(ShowApiPicClassificationDetail.AllClassification allClassification : detail.getList()){
-            if(allClassification.getName().equals(classification)){
-                List<ShowApiPicClassificationDetail.Classification> classifications = allClassification.getList();
-                for(ShowApiPicClassificationDetail.Classification classification : classifications){
-                    mTabLayout.addTab(mTabLayout.newTab().setText(classification.getName()));
-                }
+    public void initViewPager(PictureClassificationResultBody detail){
+
+        for(Classification classification : detail.getList()){
+            if(classification.getName().equals(classificationName)){
+                mClassificationId = classification.getList();
+                break;
             }
         }
+
+        myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), mClassificationId);
+        mViewPager.setAdapter(myViewPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
         mTabLayout.setupWithViewPager(mViewPager);
-        BeautifulCollectionBaseFragment fragment = BeautifulCollectionBaseFragment.newInstance();
-    }
-
-    public void initRx(){
-        Log.e("msg", "initRx");
-        Subscriber subscriber = new Subscriber() {
-            @Override
-            public void onCompleted() {
-                Log.e("tag", "completed");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e("tag", "error");
-                Log.e("tag", e.getMessage());
-            }
-
-            @Override
-            public void onNext(Object o) {
-                Log.e("tag", "next");
-                if(o == null || ((List<TagDetail>)o).isEmpty()){
-                    showMessageByString("没有数据");
-                }else{
-                    List<TagDetail> details = (List<TagDetail>)o;
-                    for(TagDetail detail : details){
-                        Log.e("tag", detail.getTag() + " " + detail.getUrl());
-                    }
-                }
-            }
-        };
-        Observable.create(new Observable.OnSubscribe<List<TagDetail>>() {
-            @Override
-            public void call(Subscriber<? super List<TagDetail>> subscriber) {
-                List<TagDetail> list = HtmlParserWithJSoup.getInstance().parserHtmlForTags(Constant.ADDRESS_PICJUMBO);
-                if(list.get(0).getTag().equals("error")){
-                    try {
-                        subscriber.onError(new Exception(list.get(0).getUrl()));
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    subscriber.onNext(list);
-                    subscriber.onCompleted();
-                }
-
-            }
-        }).subscribeOn(Schedulers.io())
-          .unsubscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(subscriber);
     }
 
 }

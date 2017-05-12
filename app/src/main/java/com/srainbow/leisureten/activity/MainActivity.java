@@ -220,7 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case "娱乐":
                 return "娱乐八卦";
             case "写真":
-                return "美女写真";
+                return "美女图片";
             case "新闻":
                 return "社会百态";
             case "明星":

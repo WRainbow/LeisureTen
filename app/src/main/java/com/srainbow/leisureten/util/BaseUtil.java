@@ -21,7 +21,7 @@ public class BaseUtil {
         return instance;
     }
 
-    public static int getRandomIndex(int end) {
+    public int getRandomIndex(int end) {
         return (int) (Math.random() * end);
     }
 
