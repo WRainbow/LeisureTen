@@ -14,22 +14,35 @@ import rx.schedulers.Schedulers;
  * Created by SRainbow on 2016/9/29.
  */
 public class RetrofitThing {
-    public volatile static RequestApi requestApi;
+    public static RequestApi juheApi;
+    public static RequestApi showApi;
 
-    public RequestApi getRequestApi(String baseUrl){
-        if(requestApi == null){
+    public RequestApi getJuHeApi(){
+        if(juheApi == null){
             Retrofit retrofit=new Retrofit.Builder()
-                    .baseUrl(baseUrl)
+                    .baseUrl(Constant.BASERURL_JUHU)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            requestApi=retrofit.create(RequestApi.class);
+            juheApi =retrofit.create(RequestApi.class);
         }
-        return requestApi;
+        return juheApi;
+    }
+
+    public RequestApi getShowApi(){
+        if(showApi == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Constant.BASEURL_PICCLASSIFICATIONURL)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            showApi = retrofit.create(RequestApi.class);
+        }
+        return showApi;
     }
 
     public void onFunnyPicResponse(SubscriberByTag subscriber){
-        getRequestApi(Constant.BASERURL_JUHU).getFunnyPicData("b3c10341bc734b752fa7cb47b1fb0641")
+        getJuHeApi().getFunnyPicData(Constant.JUHE_KEY)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -37,7 +50,7 @@ public class RetrofitThing {
     }
 
     public void onJokeResponse(SubscriberByTag subscriber){
-        getRequestApi(Constant.BASERURL_JUHU).getJokeData("b3c10341bc734b752fa7cb47b1fb0641")
+        getJuHeApi().getJokeData(Constant.JUHE_KEY)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -45,16 +58,16 @@ public class RetrofitThing {
     }
 
     public void onShowApiPicClassificationResponse(SubscriberByTag subscriber){
-        getRequestApi(Constant.BASEURL_PICCLASSIFICATIONURL).getShowApiPicData(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN)
+        getShowApi().getShowApiPicData(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
 
-    public void onShowApiPicContentResponse(String type, SubscriberByTag subscriber){
-        getRequestApi(Constant.BASEURL_PICCLASSIFICATIONURL).getShowApiContentData(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN,
-                type)
+    public void onShowApiPicContentResponse(String type, String page, SubscriberByTag subscriber){
+        getShowApi().getShowApiContentData(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN,
+                type, page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

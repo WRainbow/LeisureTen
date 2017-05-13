@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         implements View.OnClickListener{
 
     private Context mContext;
-    private OnItemClickListener itemClickListener;
+    private OnItemWithParamClickListener mItemInRvClickToDoListener;
     private List<ImgWithAuthor> imgWithAuthorList;
 
     public HDPictureShowRVAdapter(Context context, List<ImgWithAuthor> list){
@@ -45,6 +47,13 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         Glide.with(mContext).load("http:" + imgWithAuthorList.get(position).getImgUrl()).into(holder.mRectIv);
         holder.mTvAuther.setText(String.format(
                 mContext.getResources().getString(R.string.imgAuthor), imgWithAuthorList.get(position).getImgAuthor()));
+        //set Collection ImageView tag
+        holder.mIvCollection.setTag(imgWithAuthorList);
+        //set Download ImageView tag
+        holder.mIvDownload.setTag(imgWithAuthorList);
+        // setOnClickListener
+        holder.mIvCollection.setOnClickListener(this);
+        holder.mIvDownload.setOnClickListener(this);
     }
 
     @Override
@@ -52,14 +61,14 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         return imgWithAuthorList == null ? 0 : imgWithAuthorList.size();
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.itemClickListener = listener;
+    public void setOnItemClickListener(OnItemWithParamClickListener listener){
+        this.mItemInRvClickToDoListener = listener;
     }
 
     @Override
     public void onClick(View v) {
-        if(itemClickListener != null){
-            itemClickListener.onItemClick(v);
+        if(mItemInRvClickToDoListener != null){
+            mItemInRvClickToDoListener.onItemWithParamClick(v, v.getTag());
 //            switch (v.getId()){
 //                case R.id.rv_hd_picture_showpic_iv:
 //
@@ -77,6 +86,16 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         ImageView mRectIv;
         @Bind(R.id.rv_hd_picture_author_tv)
         TextView mTvAuther;
+
+        //Collection and DownLoad RelativeLayout
+        @Bind(R.id.rv_hd_picture_include)
+        RelativeLayout mRlayoutCollectionDownLoad;
+        //Collection ImageView
+        @Bind(R.id.layout_collection_iv)
+        ImageView mIvCollection;
+        //Download ImageView
+        @Bind(R.id.layout_download_iv)
+        ImageView mIvDownload;
         public HDPictureShowHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

@@ -24,4 +24,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="prePage">上一页</string>
     <string name="nextPage">下一页</string>
+    <string name="inAtlas">进入图集</string>
+
+    <string name="menuCollection">收藏</string>
+    <string name="menuMusicList">音乐歌单</string>
+    <string name="menuSetting">设置</string>
+    <string name="menuAbout">关于</string>
+    <string name="menuFeedBack">意见反馈</string>
 </resources>

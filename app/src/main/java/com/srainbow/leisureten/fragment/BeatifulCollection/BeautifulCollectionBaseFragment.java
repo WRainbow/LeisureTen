@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,19 +37,32 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class BeautifulCollectionBaseFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnItemWithParamClickListener {
+        OnItemWithParamClickListener, View.OnClickListener{
 
     private static final String ARG_PARAM1 = "param1";
     private String mParam1 = "null";
+    //如果加载了再次进入页面时不需要重新加载，使用isLoading进行判断，每次加载完成isLoading设置为false；
+    private boolean isLoading = false;
+    //同时满足isVisible和isCreateView都为true时在进行加载数据（懒加载模式）;
     private boolean isVisible=false;
     private boolean isCreateView=false;
+    private int currentPage = 1;
+    private int allPage = 1;
 
-    private List<PictureContent> imgListWithDescriptionList;
+    private PictureQueryResultBody resultBody;
+    private List<PictureContent> pictureContentList;
     private BeautifulRVAdapter mAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private View v;
 
-    @Bind(R.id.test)
-    TextView mTvTest;
+    @Bind(R.id.beautiful_include)
+    RelativeLayout mRlayoutPage;
+    @Bind(R.id.layout_prepage_tv)
+    TextView mTvPrePage;
+    @Bind(R.id.layout_nextpage_tv)
+    TextView mTvNextPage;
+    @Bind(R.id.layout_loading_tv)
+    TextView mTvLoading;
     @Bind(R.id.beautiful_base_rv)
     RecyclerView mRecyclerView;
 
@@ -62,7 +77,6 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
      * @return A new instance of fragment BeautifulCollectionBaseFragment.
      */
     public static BeautifulCollectionBaseFragment newInstance(String type) {
-        Log.e("BeautifulFragment", "newInstance");
         BeautifulCollectionBaseFragment fragment = new BeautifulCollectionBaseFragment();
         Bundle arg = new Bundle();
         arg.putString(ARG_PARAM1, type);
@@ -72,30 +86,33 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e("BeautifulFragment", mParam1 + "onCreate");
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
-        Log.e("onCreate", mParam1);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("BeautifulFragment", mParam1 + "onCreateView");
-
-        View view = inflater.inflate(R.layout.fragment_beatiful_collection_base, container, false);
-        ButterKnife.bind(this, view);
-        initView();
-        isCreateView = true;
-        lazyLoad();
-        return view;
+        if(v != null){
+            ViewGroup parent = (ViewGroup)v.getParent();
+            if(parent != null){
+                parent.removeView(v);
+            }
+            return v;
+        }else {
+            v = inflater.inflate(R.layout.fragment_beatiful_collection_base, container, false);
+            ButterKnife.bind(this, v);
+            initView();
+            isCreateView = true;
+            lazyLoad();
+            return v;
+        }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        Log.e("BeautifulFragment", mParam1 + "setUserVisibleHint");
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()){
             isVisible = true;
@@ -104,14 +121,16 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
     }
 
     public void initView(){
-        mTvTest.setText(mParam1);
         initRv();
+        mTvPrePage.setOnClickListener(this);
+        mTvNextPage.setOnClickListener(this);
     }
 
     public void initRv(){
-        imgListWithDescriptionList = new ArrayList<>();
+        pictureContentList = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new BeautifulRVAdapter(getActivity(), imgListWithDescriptionList);
+        mAdapter = new BeautifulRVAdapter(getActivity(), pictureContentList);
+        mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -119,36 +138,58 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
 
     public void lazyLoad(){
         if(isCreateView && isVisible) {
-            Log.e("BeautifulFragment", mParam1 + "lazyLoad");
-            RetrofitThing.getInstance().onShowApiPicContentResponse(mParam1, new SubscriberByTag("init", this));
+            if(!isLoading) {
+                RetrofitThing.getInstance().onShowApiPicContentResponse(mParam1, "1", new SubscriberByTag("init", this));
+            }else{
+            }
         }
+    }
+
+    public void load(String page){
+//        isLoading = true;
+        showLoadTv();
+        RetrofitThing.getInstance().onShowApiPicContentResponse(mParam1, page, new SubscriberByTag("init", this));
     }
 
     @Override
     public void onCompleted(String tag) {
-        Log.e("rx", "onCompleted");
         mAdapter.notifyDataSetChanged();
+        mTvLoading.setVisibility(View.GONE);
+        isLoading = true;
+        allPage = resultBody.getPagebean().getAllPages();
+        currentPage = resultBody.getPagebean().getCurrentPage();
+        if(allPage == 0){
+            //没有数据，显示提示信息
+            mRlayoutPage.setVisibility(View.VISIBLE);
+            mTvLoading.setVisibility(View.VISIBLE);
+            mTvLoading.setText("没有数据");
+            Toast.makeText(getActivity(), "没有数据InFragment", Toast.LENGTH_SHORT).show();
+        }else {
+            showPageRlayout(allPage, currentPage);
+        }
     }
 
     @Override
     public void onError(String tag, Throwable e) {
-        Log.e("BaseFragmentError", e.getMessage());
+        isLoading = false;
     }
 
     @Override
     public void onNext(String tag, Object o) {
-        Log.e("rx", "onNext");
         if(o == null || ((PictureQueryResult)o).getShowapi_res_body() == null){
             Toast.makeText(getActivity(), "没有数据了", Toast.LENGTH_SHORT).show();
         }else{
             switch (tag){
                 case "init":
-                    imgListWithDescriptionList.clear();
-                    PictureQueryResultBody resultBody = ((PictureQueryResult)o).getShowapi_res_body();
+                    pictureContentList.clear();
+                    resultBody = ((PictureQueryResult)o).getShowapi_res_body();
                     List<PictureContent> contentList = resultBody.getPagebean().getContentlist();
-                    for(PictureContent content : contentList){
-                        imgListWithDescriptionList.add(content);
+                    if(contentList.size() > 0) {
+                        for (PictureContent content : contentList) {
+                            pictureContentList.add(content);
+                        }
                     }
+
                     break;
             }
 
@@ -157,7 +198,93 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
 
     @Override
     public void onItemWithParamClick(View v, Object o) {
-        List<PictureSizeUrl> sizeUrlList = (List<PictureSizeUrl>)o;
-        Log.e("onItemWithParamClick", sizeUrlList.size() + "");
+        PictureContent pictureContent = (PictureContent)o;
+        switch (v.getId()){
+            //进入图集
+            case R.id.beautiful_base_in_llayout:
+                Toast.makeText(getActivity(), "进入图集", Toast.LENGTH_SHORT).show();
+                break;
+            //收藏
+            case R.id.layout_collection_iv:
+                Toast.makeText(getActivity(), "收藏", Toast.LENGTH_SHORT).show();
+                break;
+            //下载
+            case R.id.layout_download_iv:
+                Toast.makeText(getActivity(), "下载", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    public void showPageRlayout(int all, int current){
+        mRlayoutPage.setVisibility(View.VISIBLE);
+        if(current < all){
+            //总页数大于1
+            if(current == 1){
+                //为第一页
+                mTvPrePage.setVisibility(View.GONE);
+                mTvNextPage.setVisibility(View.VISIBLE);
+            }else{
+                //不为第一页
+                mTvPrePage.setVisibility(View.VISIBLE);
+                mTvNextPage.setVisibility(View.VISIBLE);
+            }
+        }else if(current == all){
+            //第一页或者是最后一页
+            if(current == 1){
+                //第一页也是最后一页
+                showLoadTv();
+                mTvLoading.setText("全部数据都在这啦……");
+            }else{
+                //最后一页
+                mTvPrePage.setVisibility(View.VISIBLE);
+                mTvNextPage.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void showLoadTv(){
+        mTvPrePage.setVisibility(View.GONE);
+        mTvNextPage.setVisibility(View.GONE);
+        mTvLoading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.layout_prepage_tv:
+                load(String.valueOf(currentPage - 1));
+                break;
+            case R.id.layout_nextpage_tv:
+                load(String.valueOf(currentPage + 1));
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        unbindDrawables(v.findViewById(R.id.beautiful_base_iv));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        unbindDrawables(v.findViewById(R.id.beautiful_base_iv));
+    }
+
+    private void unbindDrawables(View view) {
+        Log.e("unbind", "unbind" + view.getId());
+        if (view.getBackground() != null)
+        {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup && !(view instanceof AdapterView))
+        {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
+            {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
     }
 }

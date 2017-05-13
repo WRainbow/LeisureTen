@@ -21,6 +21,7 @@ public class Constant {
     }
 
     public static final String BASERURL_JUHU = "https://v.juhe.cn/";
+    public static final String JUHE_KEY = "b3c10341bc734b752fa7cb47b1fb0641";
     public static final String ADDRESS_PICJUMBO = "https://picjumbo.com/";
     public static final String SHOWAPI_APPID = "34505";
     public static final String SHOWAPI_SIGN = "5f5174a8dada496e8b10ad2aabca5b15";

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 import com.srainbow.leisureten.R;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class JokeFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnTVInRvClickToDoListener, View.OnClickListener{
+        OnItemWithParamClickListener, View.OnClickListener{
 
     private LinearLayoutManager linearLayoutManager;
     private JokeRVAdapter mJokeRVAdapter;
@@ -110,11 +111,19 @@ public class JokeFragment extends BaseFragment implements SubscriberByTag.onSubs
     }
 
     @Override
-    public void onTvItemClick(View v) {
+    public void onItemWithParamClick(View v, Object o) {
         switch (v.getId()){
             case R.id.footer_loadmore_tv:
                 //请求数据
                 loadDataByTag("loadMore");
+                break;
+            //Collection ImageView Clicked
+            case R.id.layout_collection_iv:
+                Toast.makeText(getActivity(), "Collection", Toast.LENGTH_SHORT).show();
+                break;
+            //Download ImageView Clicked;
+            case R.id.layout_download_iv:
+                Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -210,5 +219,4 @@ public class JokeFragment extends BaseFragment implements SubscriberByTag.onSubs
 
 
     }
-
 }

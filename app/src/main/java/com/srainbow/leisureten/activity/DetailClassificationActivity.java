@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 //ShowApi图片显示
 public class DetailClassificationActivity extends BaseActivity{
 
-    private static String classificationName = "";
+    private String classificationName = "";
     private List<ClassificationDetail> mClassificationId;
     private MyViewPagerAdapter myViewPagerAdapter;
 
@@ -86,7 +86,6 @@ public class DetailClassificationActivity extends BaseActivity{
 
         myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), mClassificationId);
         mViewPager.setAdapter(myViewPagerAdapter);
-        mViewPager.setOffscreenPageLimit(2);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 

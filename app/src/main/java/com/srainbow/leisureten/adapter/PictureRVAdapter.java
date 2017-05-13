@@ -1,14 +1,18 @@
 package com.srainbow.leisureten.adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.srainbow.leisureten.R;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
 import com.srainbow.leisureten.data.APIData.FunnyPicDetail;
 import com.srainbow.leisureten.widget.RectangleImageView;
@@ -29,7 +33,7 @@ public class PictureRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private Context mContext;
     private List<FunnyPicDetail> funnyPicDetailList;
-    private OnTVInRvClickToDoListener mTvInRvClickToDoListener;
+    private OnItemWithParamClickListener mItemInRvClickListener;
 
     public PictureRVAdapter(Context context, List<FunnyPicDetail> details){
         mContext = context;
@@ -62,8 +66,17 @@ public class PictureRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if(holder instanceof ItemViewHolder){
             ItemViewHolder itemViewHolder = (ItemViewHolder)holder;
             String picUrl = funnyPicDetailList.get(position).url;
+            //load image
             Glide.with(mContext).load(picUrl).into(itemViewHolder.mRectIvPicture);
+            //set description
             itemViewHolder.mTvDescriptionText.setText(funnyPicDetailList.get(position).content);
+            //set Collection ImageView tag (type: FunnyPicDetail)
+            itemViewHolder.mIvCollection.setTag(funnyPicDetailList.get(position));
+            //set Download ImageView tag (type: FunnyPicDetail)
+            itemViewHolder.mIvDownload.setTag(funnyPicDetailList.get(position));
+            //setOnClickListener
+            itemViewHolder.mIvCollection.setOnClickListener(this);
+            itemViewHolder.mIvDownload.setOnClickListener(this);
         } else if(holder instanceof FooterViewHolder){
             FooterViewHolder footerViewHolder = (FooterViewHolder)holder;
             footerViewHolder.mTvLoadMore.setOnClickListener(this);
@@ -77,18 +90,14 @@ public class PictureRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onClick(View view) {
-        if(mTvInRvClickToDoListener != null){
-            switch (view.getId()){
-                case R.id.footer_loadmore_tv:
-                    mTvInRvClickToDoListener.onTvItemClick(view);
-                    break;
-            }
+        if(mItemInRvClickListener != null){
+            mItemInRvClickListener.onItemWithParamClick(view, view.getTag());
         }
 
     }
 
-    public void setOnItemClickListener(OnTVInRvClickToDoListener listener){
-        this.mTvInRvClickToDoListener = listener;
+    public void setOnItemClickListener(OnItemWithParamClickListener listener){
+        this.mItemInRvClickListener = listener;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
@@ -96,6 +105,14 @@ public class PictureRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         RectangleImageView mRectIvPicture;
         @Bind(R.id.funnypicture_rv_tv)
         TextView mTvDescriptionText;
+        //Collection and Download RelativeLayout
+        @Bind(R.id.funnypicture_include)
+        RelativeLayout mRlayoutCollectionDownload;
+        //Collection ImageView
+        @Bind(R.id.layout_collection_iv)
+        ImageView mIvCollection;
+        @Bind(R.id.layout_download_iv)
+        ImageView mIvDownload;
         public ItemViewHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this, itemView);

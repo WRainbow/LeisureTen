@@ -5,9 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
 import com.srainbow.leisureten.data.APIData.JokeDetail;
 
@@ -26,7 +29,7 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private Context mContext;
     private List<JokeDetail> jokeDetails;
-    private OnTVInRvClickToDoListener mTvInRvClickToDoListener;
+    private OnItemWithParamClickListener mItemInRvClickListener;
 
     public JokeRVAdapter(Context context, List<JokeDetail> details){
         mContext = context;
@@ -59,6 +62,14 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(holder instanceof JokeRVAdapter.ItemViewHolder){
             JokeRVAdapter.ItemViewHolder itemViewHolder = (JokeRVAdapter.ItemViewHolder)holder;
             itemViewHolder.mTvContentText.setText(jokeDetails.get(position).content);
+            //set Collection ImageView tag
+            itemViewHolder.mIvCollection.setTag(jokeDetails.get(position));
+            //set Download ImageView background and tag
+            itemViewHolder.mIvDownload.setImageResource(R.drawable.ic_copy);
+            itemViewHolder.mIvDownload.setTag(jokeDetails.get(position).content);
+            //setOnClickListener
+            itemViewHolder.mIvCollection.setOnClickListener(this);
+            itemViewHolder.mIvDownload.setOnClickListener(this);
         } else if(holder instanceof JokeRVAdapter.FooterViewHolder){
             JokeRVAdapter.FooterViewHolder footerViewHolder = (JokeRVAdapter.FooterViewHolder)holder;
             footerViewHolder.mTvLoadMore.setOnClickListener(this);
@@ -72,23 +83,27 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onClick(View view) {
-        if(mTvInRvClickToDoListener != null){
-            switch (view.getId()){
-                case R.id.footer_loadmore_tv:
-                    mTvInRvClickToDoListener.onTvItemClick(view);
-                    break;
-            }
+        if(mItemInRvClickListener != null){
+            mItemInRvClickListener.onItemWithParamClick(view, view.getTag());
         }
 
     }
 
-    public void setOnItemClickListener(OnTVInRvClickToDoListener listener){
-        this.mTvInRvClickToDoListener = listener;
+    public void setOnItemClickListener(OnItemWithParamClickListener listener){
+        this.mItemInRvClickListener = listener;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
         @Bind(R.id.joke_rv_tv)
         TextView mTvContentText;
+        //Collection and Download RelativeLayout
+        @Bind(R.id.joke_include)
+        RelativeLayout mRlayoutCollectionDownload;
+        //Collection ImageView
+        @Bind(R.id.layout_collection_iv)
+        ImageView mIvCollection;
+        @Bind(R.id.layout_download_iv)
+        ImageView mIvDownload;
         public ItemViewHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this, itemView);

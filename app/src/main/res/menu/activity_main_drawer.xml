@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_menu_collection"
+            android:title="@string/menuCollection"/>
+        <item
+            android:id="@+id/nav_menu_music"
+            android:title="@string/menuMusicList"/>
+        <item
+            android:id="@+id/nav_menu_setting"
+            android:title="@string/menuSetting"/>
+        <item
+            android:id="@+id/nav_menu_feedback"
+            android:title="@string/menuFeedBack"/>
+        <item
+            android:id="@+id/nav_menu_about"
+            android:title="@string/menuAbout"/>
+    </group>
+</menu>
