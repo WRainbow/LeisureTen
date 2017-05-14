@@ -109,6 +109,8 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
         ImageView mIvDownLoad;
         @Bind(R.id.layout_collection_iv)
         ImageView mIvCollection;
+        @Bind(R.id.layout_collection_down_iv)
+        ImageView mIvCollectionDown;
 
         public BeautifulHolder(View itemView) {
             super(itemView);

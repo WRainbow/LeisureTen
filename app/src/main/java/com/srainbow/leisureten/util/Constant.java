@@ -42,4 +42,7 @@ public class Constant {
     public static final String CHANGE_MUSIC="com.srainbow.action.CHANGE_MUSIC";
     public static final String CHANGE_TIME="com.srainbow.action.CHANGE_TIME";
     public static final String CHANGE_PALYSTATUS="com.srainbow.action.CHANGE_PALYSTATUS";
+
+    public static final String USERNAME_PATTERN = "^[a-zA-Z]\\w{1,14}$";
+    public static final String PASSWORD_PATTERN = "^[a-zA-Z0-9]{5,15}$";
 }

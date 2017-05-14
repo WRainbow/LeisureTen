@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LeisureTen</string>
+    <string name="app_name">休闲十分</string>
     <string name="HappyArea">开心十分</string>
     <string name="ClassificationMore">更多分类</string>
     <string name="BeautifulCollection">美图大全</string>
@@ -26,9 +26,38 @@
     <string name="nextPage">下一页</string>
     <string name="inAtlas">进入图集</string>
 
+    <string name="pageNum">%1$d/%2$d</string>
+
+    <string name="navigation_drawer_open">打开抽屉</string>
+    <string name="navigation_drawer_close">关闭抽屉</string>
+
+    <string name="clickToLogin">点击登录</string>
+    <string name="userName">用户名</string>
+    <string name="userNameRegister">用户名(2-15位数字字母下划线组成)</string>
+    <string name="passWord">密码</string>
+    <string name="passWordRegister">密码(6-16位数字字母组合)</string>
+    <string name="passWordConfirm">确认密码</string>
+    <string name="login">登录</string>
+    <string name="toRegister">还没有账号？点击注册</string>
+    <string name="register">注册</string>
     <string name="menuCollection">收藏</string>
     <string name="menuMusicList">音乐歌单</string>
     <string name="menuSetting">设置</string>
     <string name="menuAbout">关于</string>
     <string name="menuFeedBack">意见反馈</string>
+
+    <string-array name="jazzy_effects">
+        <item>Standard</item>
+        <item>Tablet</item>
+        <item>CubeIn</item>
+        <item>CubeOut</item>
+        <item>FlipVertical</item>
+        <item>FlipHorizontal</item>
+        <item>Stack</item>
+        <item>ZoomIn</item>
+        <item>ZoomOut</item>
+        <item>RotateUp</item>
+        <item>RotateDown</item>
+        <item>Accordion</item>
+    </string-array>
 </resources>

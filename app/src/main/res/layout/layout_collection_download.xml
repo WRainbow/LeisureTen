@@ -24,4 +24,16 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="8dp"
         android:src="@drawable/ic_collection" />
+
+    <ImageView
+        android:id="@+id/layout_collection_down_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/layout_download_iv"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="@drawable/ic_collection_ed"
+        android:visibility="gone"/>
 </RelativeLayout>

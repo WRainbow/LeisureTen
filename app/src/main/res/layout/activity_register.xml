@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_vertical_margin"
+    tools:context="com.srainbow.leisureten.activity.RegisterActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp">
+
+        <EditText
+            android:id="@+id/register_username_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/userNameRegister"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:imeOptions="actionNext"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/register_password_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/passWordRegister"
+            android:imeActionId="@+id/register"
+            android:imeActionLabel="@string/register"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:imeOptions="actionNext"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/register_password_confirm_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/passWordConfirm"
+            android:imeActionId="@+id/register"
+            android:imeActionLabel="@string/register"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:imeOptions="actionDone"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/register_register_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:textAppearanceMedium"
+        android:layout_marginTop="26dp"
+        android:padding="16dp"
+        android:text="@string/register"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:background="@color/colorPrimary500"/>
+</LinearLayout>

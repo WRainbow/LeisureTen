@@ -25,6 +25,10 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
         fragmentList = new ArrayList<>();
         mClassificationDetail = list;
         for(ClassificationDetail s : list){
+            String id = s.getId();
+            if(!id.equals("6001") && !id.equals("6003") && !id.equals("3001")
+                    && !id.equals("3002") && !id.equals("5001")
+                    && !id.equals("5002") && !id.equals("5004"))
             fragmentList.add(BeautifulCollectionBaseFragment.newInstance(s.getId()));
         }
         Log.e("adapter", fragmentList.size() + "");

@@ -1,6 +1,7 @@
 package com.srainbow.leisureten.fragment.BeatifulCollection;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.srainbow.leisureten.R;
+import com.srainbow.leisureten.activity.ShowAtlasDetailActivity;
 import com.srainbow.leisureten.adapter.BeautifulRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
@@ -22,6 +24,7 @@ import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryRe
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryResultBody;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureSizeUrl;
 import com.srainbow.leisureten.fragment.BaseFragment;
+import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 
@@ -140,7 +143,6 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
         if(isCreateView && isVisible) {
             if(!isLoading) {
                 RetrofitThing.getInstance().onShowApiPicContentResponse(mParam1, "1", new SubscriberByTag("init", this));
-            }else{
             }
         }
     }
@@ -198,15 +200,47 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
 
     @Override
     public void onItemWithParamClick(View v, Object o) {
+        //o instanceof List<PictureSizeUrl>, if o != null
         PictureContent pictureContent = (PictureContent)o;
+
+        //show big picture's url
+        ArrayList<String> imgUrlList = new ArrayList<>();
+        for(PictureSizeUrl pictureSizeUrl : pictureContent.getList()){
+            imgUrlList.add(pictureSizeUrl.getBig());
+        }
+
+        /*
+            if picture collected, information be needed;
+            index:0 - typeName like "萌宠"
+                  1 - title like "超萌喵星人火爆全场"
+                  2 - type like "6002"
+                  3 - itemId like "98313694"
+                  4 - ct like "2015-12-25 04:11:12.442"
+         */
+        ArrayList<String> collectionInfo = new ArrayList<>();
+        collectionInfo.add(pictureContent.getTypeName());
+        collectionInfo.add(pictureContent.getTitle());
+        collectionInfo.add(pictureContent.getType());
+        collectionInfo.add(pictureContent.getItemId());
+        collectionInfo.add(pictureContent.getCt());
+
         switch (v.getId()){
             //进入图集
             case R.id.beautiful_base_in_llayout:
+                Intent intent = new Intent(getActivity(), ShowAtlasDetailActivity.class);
+                intent.putStringArrayListExtra("imgUrlList", imgUrlList);
+                intent.putStringArrayListExtra("collectionInfo", collectionInfo);
+                startActivity(intent);
                 Toast.makeText(getActivity(), "进入图集", Toast.LENGTH_SHORT).show();
                 break;
             //收藏
             case R.id.layout_collection_iv:
-                Toast.makeText(getActivity(), "收藏", Toast.LENGTH_SHORT).show();
+                if(BackGroundRequest.getInstance().addBeautifulAtlas(pictureContent)){
+                    Toast.makeText(getActivity(), "收藏", Toast.LENGTH_SHORT).show();
+
+                }else{
+
+                }
                 break;
             //下载
             case R.id.layout_download_iv:

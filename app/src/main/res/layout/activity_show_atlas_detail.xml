@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.srainbow.leisureten.activity.ShowAtlasDetailActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/atlas_detail_tb"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary500">
+
+    </android.support.v7.widget.Toolbar>
+    <include
+        android:id="@+id/atlas_detail_include"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_collection_download"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+    <com.srainbow.leisureten.frame.jazzyviewpager.JazzyViewPager
+        android:id="@+id/atlas_detail_jvp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/atlas_detail_tb"
+        android:layout_above="@id/atlas_detail_include"
+        app:style="tablet"
+        app:fadeEnabled="true"
+        app:outlineColor="@color/colorPrimary">
+
+    </com.srainbow.leisureten.frame.jazzyviewpager.JazzyViewPager>
+    <TextView
+        android:id="@+id/atlas_detail_pagenum_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:text="@string/pageNum"/>
+</RelativeLayout>

@@ -16,4 +16,7 @@
     <color name="colorGray">#eae5e8</color>
     <color name="colorGrayEr">#d6d3d3</color>
     <color name="colorWhite">#ffffff</color>
+
+
+    <color name="holo_blue">#FF33E5B5</color>
 </resources>

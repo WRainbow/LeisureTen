@@ -21,7 +21,14 @@
         <activity android:name=".activity.ContentShowActivity" />
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.DetailClassificationActivity" />
-        <activity android:name=".activity.HDPictureShowActivity"></activity>
+        <activity android:name=".activity.HDPictureShowActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/login"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".activity.ShowAtlasDetailActivity" />
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.BaseActivityWithInstance"></activity>
     </application>
 
 </manifest>
