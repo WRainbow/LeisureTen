@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
-import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.data.APIData.JokeDetail;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private Context mContext;
     private List<JokeDetail> jokeDetails;
-    private OnItemWithParamClickListener mItemInRvClickListener;
+    private OnItemWithParamViewClickListener mItemInRvClickListener;
 
     public JokeRVAdapter(Context context, List<JokeDetail> details){
         mContext = context;
@@ -63,13 +63,18 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             JokeRVAdapter.ItemViewHolder itemViewHolder = (JokeRVAdapter.ItemViewHolder)holder;
             itemViewHolder.mTvContentText.setText(jokeDetails.get(position).content);
             //set Collection ImageView tag
-            itemViewHolder.mIvCollection.setTag(jokeDetails.get(position));
+            itemViewHolder.mIvCollection.setTag(R.id.dataTag, jokeDetails.get(position));
+            itemViewHolder.mIvCollection.setTag(R.id.viewTag, itemViewHolder.mIvCollectionDown);
+            //set Collection Down ImageView tag
+            itemViewHolder.mIvCollectionDown.setTag(R.id.dataTag, jokeDetails.get(position));
+            itemViewHolder.mIvCollectionDown.setTag(R.id.viewTag, itemViewHolder.mIvCollection);
             //set Download ImageView background and tag
-            itemViewHolder.mIvDownload.setImageResource(R.drawable.ic_copy);
-            itemViewHolder.mIvDownload.setTag(jokeDetails.get(position).content);
+            itemViewHolder.mIvCopy.setImageResource(R.drawable.ic_copy);
+            itemViewHolder.mIvCopy.setTag(R.id.dataTag, jokeDetails.get(position).content);
             //setOnClickListener
             itemViewHolder.mIvCollection.setOnClickListener(this);
-            itemViewHolder.mIvDownload.setOnClickListener(this);
+            itemViewHolder.mIvCollectionDown.setOnClickListener(this);
+            itemViewHolder.mIvCopy.setOnClickListener(this);
         } else if(holder instanceof JokeRVAdapter.FooterViewHolder){
             JokeRVAdapter.FooterViewHolder footerViewHolder = (JokeRVAdapter.FooterViewHolder)holder;
             footerViewHolder.mTvLoadMore.setOnClickListener(this);
@@ -84,12 +89,24 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onClick(View view) {
         if(mItemInRvClickListener != null){
-            mItemInRvClickListener.onItemWithParamClick(view, view.getTag());
+            switch (view.getId()){
+                case R.id.footer_loadmore_tv:
+                    mItemInRvClickListener.onItemWithParamViewClick(view, null, null);
+                    break;
+                //copy imageView clicked
+                case R.id.layout_download_iv:
+                    mItemInRvClickListener.onItemWithParamViewClick(view, view.getTag(R.id.dataTag), null);
+                    break;
+                //collection and cancel collection imageView clicked
+                default:
+                    mItemInRvClickListener.onItemWithParamViewClick(view, view.getTag(R.id.dataTag),
+                            (ImageView)view.getTag(R.id.viewTag));
+            }
         }
 
     }
 
-    public void setOnItemClickListener(OnItemWithParamClickListener listener){
+    public void setOnItemClickListener(OnItemWithParamViewClickListener listener){
         this.mItemInRvClickListener = listener;
     }
 
@@ -102,8 +119,10 @@ public class JokeRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         //Collection ImageView
         @Bind(R.id.layout_collection_iv)
         ImageView mIvCollection;
+        @Bind(R.id.layout_collection_down_iv)
+        ImageView mIvCollectionDown;
         @Bind(R.id.layout_download_iv)
-        ImageView mIvDownload;
+        ImageView mIvCopy;
         public ItemViewHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this, itemView);

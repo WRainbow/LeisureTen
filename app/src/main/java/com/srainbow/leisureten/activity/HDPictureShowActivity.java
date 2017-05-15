@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.adapter.HDPictureShowRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
+import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.util.HtmlParserWithJSoup;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HDPictureShowActivity extends BaseActivity implements OnClickListener, OnItemWithParamClickListener{
+public class HDPictureShowActivity extends BaseActivity implements OnClickListener, OnItemWithParamViewClickListener {
 
     private static  String URL = "";
 
@@ -175,15 +177,34 @@ public class HDPictureShowActivity extends BaseActivity implements OnClickListen
     }
 
     @Override
-    public void onItemWithParamClick(View v, Object o) {
+    public void onItemWithParamViewClick(View v, Object o, View anther) {
         switch (v.getId()){
             //Collection ImageView clickListener
             case R.id.layout_collection_iv:
-                showMessageByString("Collection");
+                if(BackGroundRequest.getInstance().addHDPicture((ImgWithAuthor)o)){
+                    showMessageByString("已收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("取消收藏");
+                }
+                break;
+            //cancel collection imageView clicked
+            case R.id.layout_collection_down_iv:
+                if(BackGroundRequest.getInstance().deletedHDPicture((ImgWithAuthor)o)){
+                    showMessageByString("取消收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("取消收藏失败");
+                }
                 break;
             //Download ImageView clickListener;
             case R.id.layout_download_iv:
-                showMessageByString("Download");
+                showMessageByString("正在下载");
+                if(BackGroundRequest.getInstance().downLoadImage(((ImgWithAuthor)o).getImgUrl())){
+                    showMessageByString("下载成功");
+                }else{
+                    showMessageByString("下载失败");
+                }
                 break;
         }
     }

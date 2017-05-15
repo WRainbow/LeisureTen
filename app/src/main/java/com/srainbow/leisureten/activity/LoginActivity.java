@@ -2,9 +2,14 @@ package com.srainbow.leisureten.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 
@@ -20,21 +25,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Bind(R.id.login_username_et)
     EditText mEtUsername;
     @Bind(R.id.login_toregister_tv)
-    EditText mTvToRegister;
+    TextView mTvToRegister;
+    @Bind(R.id.login_tb)
+    Toolbar mTbLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        initView();
     }
 
     @Override
     public void activityState() {
         super.activityState();
-        if(RegisterActivity.instance != null){
-            RegisterActivity.instance.finish();
-        }
+//        if(RegisterActivity.instance != null){
+//            RegisterActivity.instance.finish();
+//        }
+    }
+
+    public void initView(){
+        mTbLogin.setNavigationIcon(R.drawable.ic_atlas);
+        mTbLogin.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginActivity.this.finish();
+            }
+        });
     }
 
     @Override

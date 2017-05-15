@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         implements View.OnClickListener{
 
     private Context mContext;
-    private OnItemWithParamClickListener mItemInRvClickToDoListener;
+    private OnItemWithParamViewClickListener mItemInRvClickToDoListener;
     private List<ImgWithAuthor> imgWithAuthorList;
 
     public HDPictureShowRVAdapter(Context context, List<ImgWithAuthor> list){
@@ -48,11 +49,16 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         holder.mTvAuther.setText(String.format(
                 mContext.getResources().getString(R.string.imgAuthor), imgWithAuthorList.get(position).getImgAuthor()));
         //set Collection ImageView tag
-        holder.mIvCollection.setTag(imgWithAuthorList);
+        holder.mIvCollection.setTag(R.id.dataTag, imgWithAuthorList.get(position));
+        holder.mIvCollection.setTag(R.id.viewTag, holder.mIvCollectionDown);
+        //set Collection Down ImageView tag
+        holder.mIvCollectionDown.setTag(R.id.dataTag, imgWithAuthorList.get(position));
+        holder.mIvCollectionDown.setTag(R.id.viewTag, holder.mIvCollection);
         //set Download ImageView tag
-        holder.mIvDownload.setTag(imgWithAuthorList);
+        holder.mIvDownload.setTag(R.id.dataTag, imgWithAuthorList.get(position));
         // setOnClickListener
         holder.mIvCollection.setOnClickListener(this);
+        holder.mIvCollectionDown.setOnClickListener(this);
         holder.mIvDownload.setOnClickListener(this);
     }
 
@@ -61,23 +67,29 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         return imgWithAuthorList == null ? 0 : imgWithAuthorList.size();
     }
 
-    public void setOnItemClickListener(OnItemWithParamClickListener listener){
+    public void setOnItemClickListener(OnItemWithParamViewClickListener listener){
         this.mItemInRvClickToDoListener = listener;
     }
 
     @Override
     public void onClick(View v) {
         if(mItemInRvClickToDoListener != null){
-            mItemInRvClickToDoListener.onItemWithParamClick(v, v.getTag());
-//            switch (v.getId()){
-//                case R.id.rv_hd_picture_showpic_iv:
-//
-//                    break;
-//                case R.id.rv_hd_picture_collection_iv:
-//                    break;
-//                case R.id.rv_hd_picture_download_iv:
-//                    break;
-//            }
+            switch (v.getId()){
+                //collection imageView clicked
+                case R.id.layout_collection_iv:
+                    mItemInRvClickToDoListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag),
+                            (ImageView)v.getTag(R.id.viewTag));
+                    break;
+                //cancel collection imageView clicked
+                case R.id.layout_collection_down_iv:
+                    mItemInRvClickToDoListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag),
+                            (ImageView)v.getTag(R.id.viewTag));
+                    break;
+                //download imageView clicked
+                case R.id.layout_download_iv:
+                    mItemInRvClickToDoListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag), null);
+                    break;
+            }
         }
     }
 
@@ -94,6 +106,8 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
         @Bind(R.id.layout_collection_iv)
         ImageView mIvCollection;
         //Download ImageView
+        @Bind(R.id.layout_collection_down_iv)
+        ImageView mIvCollectionDown;
         @Bind(R.id.layout_download_iv)
         ImageView mIvDownload;
         public HDPictureShowHolder(View itemView) {

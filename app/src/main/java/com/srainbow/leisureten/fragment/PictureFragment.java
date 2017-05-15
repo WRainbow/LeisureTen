@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
+import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 import com.srainbow.leisureten.R;
@@ -36,7 +38,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class PictureFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnItemWithParamClickListener, View.OnClickListener{
+        OnItemWithParamViewClickListener, View.OnClickListener{
 
     private LinearLayoutManager linearLayoutManager;
     private PictureRVAdapter mPictureRVAdapter;
@@ -115,7 +117,7 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
     }
 
     @Override
-    public void onItemWithParamClick(View v, Object o) {
+    public void onItemWithParamViewClick(View v, Object o, View anther) {
         switch (v.getId()){
             case R.id.footer_loadmore_tv:
                 //请求数据
@@ -123,11 +125,30 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
                 break;
             //Collection ImageView Clicked
             case R.id.layout_collection_iv:
-                Toast.makeText(getActivity(), "Collection", Toast.LENGTH_SHORT).show();
+                if(BackGroundRequest.getInstance().addFunnyPic((FunnyPicDetail)o)){
+                    showMessageByString("已收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("收藏失败");
+                }
+                break;
+            //cancel collection imageView clicked
+            case R.id.layout_collection_down_iv:
+                if(BackGroundRequest.getInstance().deleteFunnyPic((FunnyPicDetail)o)){
+                    showMessageByString("取消收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("取消收藏失败");
+                }
                 break;
             //Download ImageView Clicked
             case R.id.layout_download_iv:
-                Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+                showMessageByString("开始下载");
+                if(BackGroundRequest.getInstance().downLoadImage(((FunnyPicDetail)o).getUrl())){
+                    showMessageByString("下载成功");
+                }else{
+                    showMessageByString("下载失败");
+                }
                 break;
         }
     }

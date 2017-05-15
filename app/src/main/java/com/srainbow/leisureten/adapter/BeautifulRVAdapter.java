@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.srainbow.leisureten.R;
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureSizeUrl;
 
@@ -23,13 +23,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by SRainbow on 2017/4/19.
+ * Created by SRainbow mItemWithParamClickListener 2017/4/19.
  */
 
 public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.BeautifulHolder> implements View.OnClickListener{
 
     private Context mContext;
-    private OnItemWithParamClickListener mItemInRvClickToDoListener;
+    private OnItemWithParamViewClickListener mItemWithParamViewClickListener;
     private List<PictureContent> pictureContentList;
     public BeautifulRVAdapter(Context context, List<PictureContent> list) {
         this.mContext = context;
@@ -53,15 +53,20 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
         //设置title
         holder.mTvDescription.setText(pictureContentList.get(position).getTitle());
         //设置进入图集布局的tag
-        holder.mLlayoutInAtlas.setTag(pictureContentList.get(position));
+        holder.mLlayoutInAtlas.setTag(R.id.dataTag, pictureContentList.get(position));
         //设置收藏按钮的tag
-        holder.mIvCollection.setTag(pictureContentList.get(position));
+        holder.mIvCollection.setTag(R.id.dataTag, pictureContentList.get(position));
+        holder.mIvCollection.setTag(R.id.viewTag, holder.mIvCollectionDown);
         //设置下载按钮的tag
-        holder.mIvDownLoad.setTag(pictureContentList.get(position));
+        holder.mIvDownLoad.setTag(R.id.dataTag, pictureContentList.get(position));
+        //设置取消收藏按钮的tag
+        holder.mIvCollectionDown.setTag(R.id.dataTag, pictureContentList.get(position));
+        holder.mIvCollectionDown.setTag(R.id.viewTag, holder.mIvCollection);
         //设置监听器
         holder.mLlayoutInAtlas.setOnClickListener(this);
         holder.mIvCollection.setOnClickListener(this);
         holder.mIvDownLoad.setOnClickListener(this);
+        holder.mIvCollectionDown.setOnClickListener(this);
 
     }
 
@@ -72,23 +77,28 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
 
     @Override
     public void onClick(View v) {
-        if(mItemInRvClickToDoListener != null){
+        if(mItemWithParamViewClickListener != null){
             switch (v.getId()){
                 case R.id.beautiful_base_in_llayout:
-                    mItemInRvClickToDoListener.onItemWithParamClick(v, v.getTag());
+                    mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag), null);
                     break;
                 case R.id.layout_collection_iv:
-                    mItemInRvClickToDoListener.onItemWithParamClick(v, v.getTag());
+                    mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag),
+                            (ImageView)v.getTag(R.id.viewTag));
                     break;
                 case R.id.layout_download_iv:
-                    mItemInRvClickToDoListener.onItemWithParamClick(v, v.getTag());
+                    mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag), null);
+                    break;
+                case R.id.layout_collection_down_iv:
+                    mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag),
+                            (ImageView)v.getTag(R.id.viewTag));
                     break;
             }
         }
     }
 
-    public void setOnItemClickListener(OnItemWithParamClickListener listener){
-        this.mItemInRvClickToDoListener = listener;
+    public void setOnItemClickListener(OnItemWithParamViewClickListener listenerWithView){
+        this.mItemWithParamViewClickListener = listenerWithView;
     }
 
     public static class BeautifulHolder extends RecyclerView.ViewHolder{

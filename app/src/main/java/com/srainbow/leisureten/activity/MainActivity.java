@@ -254,7 +254,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             //portrait clicked
             case R.id.nav_header_iv:
                 showMessageByString("Portrait");
-                startActivityForResult(new Intent(MainActivity.this, ShowAtlasDetailActivity.class), 1);
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             //userName clicked

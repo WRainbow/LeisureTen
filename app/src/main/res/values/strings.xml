@@ -1,4 +1,8 @@
 <resources>
+
+    <item name="dataTag" type="id"/>
+    <item name="viewTag" type="id"/>
+
     <string name="app_name">休闲十分</string>
     <string name="HappyArea">开心十分</string>
     <string name="ClassificationMore">更多分类</string>

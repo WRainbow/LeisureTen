@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
+import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 import com.srainbow.leisureten.R;
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class JokeFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnItemWithParamClickListener, View.OnClickListener{
+        OnItemWithParamViewClickListener, View.OnClickListener{
 
     private LinearLayoutManager linearLayoutManager;
     private JokeRVAdapter mJokeRVAdapter;
@@ -111,7 +113,7 @@ public class JokeFragment extends BaseFragment implements SubscriberByTag.onSubs
     }
 
     @Override
-    public void onItemWithParamClick(View v, Object o) {
+    public void onItemWithParamViewClick(View v, Object o, View anther) {
         switch (v.getId()){
             case R.id.footer_loadmore_tv:
                 //请求数据
@@ -119,11 +121,25 @@ public class JokeFragment extends BaseFragment implements SubscriberByTag.onSubs
                 break;
             //Collection ImageView Clicked
             case R.id.layout_collection_iv:
-                Toast.makeText(getActivity(), "Collection", Toast.LENGTH_SHORT).show();
+                if(BackGroundRequest.getInstance().addJoke((JokeDetail)o)){
+                    showMessageByString("已收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("收藏失败");
+                }
                 break;
-            //Download ImageView Clicked;
+            //cancel collection imageView clicked
+            case R.id.layout_collection_down_iv:
+                if(BackGroundRequest.getInstance().deleteJoke((JokeDetail)o)){
+                    showMessageByString("取消收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("取消收藏失败");
+                }
+                break;
+            //Copy ImageView Clicked;
             case R.id.layout_download_iv:
-                Toast.makeText(getActivity(), "Download", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "复制成功", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

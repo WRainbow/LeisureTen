@@ -78,6 +78,10 @@ public class ShowAtlasDetailActivity extends BaseActivity implements View.OnClic
 
             }
         });
+
+        mIvCollection.setOnClickListener(this);
+        mIvDownload.setOnClickListener(this);
+        mIvCollectionDown.setOnClickListener(this);
     }
 
     @Override
@@ -87,11 +91,32 @@ public class ShowAtlasDetailActivity extends BaseActivity implements View.OnClic
             case R.id.layout_collection_iv:
                 if(BackGroundRequest.getInstance().addBeautifulPicture(
                         imgUrlList.get(currentPage), collectionInfo)){
+                    //change ImageView show after collection success
+                    showAndHideView(mIvCollectionDown, mIvCollection);
                     showMessageByString("已收藏");
+                }else {
+                    showMessageByString("收藏失败");
+                }
+                break;
+            //Collection cancel ImageView clicked
+            case R.id.layout_collection_down_iv:
+                if(BackGroundRequest.getInstance().deleteBeautifulPicture(
+                        imgUrlList.get(currentPage), collectionInfo)){
+                    //change ImageView show after collection canceled
+                    showAndHideView(mIvCollection, mIvCollectionDown);
+                    showMessageByString("取消收藏");
+                }else{
+                    showMessageByString("取消收藏失败");
                 }
                 break;
             //Download ImageView Clicked
             case R.id.layout_download_iv:
+                showMessageByString("正在下载");
+                if(BackGroundRequest.getInstance().downLoadImage(imgUrlList.get(currentPage))){
+                    showMessageByString("下载成功");
+                }else{
+                    showMessageByString("下载失败");
+                }
                 break;
         }
     }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.activity.ShowAtlasDetailActivity;
 import com.srainbow.leisureten.adapter.BeautifulRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryResult;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryResultBody;
@@ -40,7 +42,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class BeautifulCollectionBaseFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnItemWithParamClickListener, View.OnClickListener{
+        OnItemWithParamViewClickListener, View.OnClickListener{
 
     private static final String ARG_PARAM1 = "param1";
     private String mParam1 = "null";
@@ -199,7 +201,7 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
     }
 
     @Override
-    public void onItemWithParamClick(View v, Object o) {
+    public void onItemWithParamViewClick(View v, Object o, View anther) {
         //o instanceof List<PictureSizeUrl>, if o != null
         PictureContent pictureContent = (PictureContent)o;
 
@@ -236,15 +238,29 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
             //收藏
             case R.id.layout_collection_iv:
                 if(BackGroundRequest.getInstance().addBeautifulAtlas(pictureContent)){
-                    Toast.makeText(getActivity(), "收藏", Toast.LENGTH_SHORT).show();
-
+                    showMessageByString("已收藏");
+                    showAndHideView(anther, v);
                 }else{
-
+                    showMessageByString("收藏失败");
+                }
+                break;
+            //取消收藏
+            case R.id.layout_collection_down_iv:
+                if(BackGroundRequest.getInstance().deleteBeautifulAtlas(pictureContent)){
+                    showMessageByString("取消收藏");
+                    showAndHideView(anther, v);
+                }else{
+                    showMessageByString("取消收藏失败");
                 }
                 break;
             //下载
             case R.id.layout_download_iv:
-                Toast.makeText(getActivity(), "下载", Toast.LENGTH_SHORT).show();
+                showMessageByString("正在下载");
+                if(BackGroundRequest.getInstance().downLoadAtlas(pictureContent)){
+                    showMessageByString("下载成功");
+                }else{
+                    showMessageByString("下载失败");
+                }
                 break;
         }
     }
