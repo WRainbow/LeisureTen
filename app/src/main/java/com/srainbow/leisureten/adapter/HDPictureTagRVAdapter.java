@@ -40,7 +40,7 @@ public class HDPictureTagRVAdapter extends RecyclerView.Adapter<HDPictureTagRVAd
     @Override
     public void onBindViewHolder(HDPictureHolder holder, int position) {
         holder.mTvHDTag.setText(tagDetailList.get(position).getTag());
-        holder.mTvHDTag.setTag(tagDetailList.get(position).getUrl());
+        holder.mTvHDTag.setTag(tagDetailList.get(position));
         holder.mTvHDTag.setOnClickListener(this);
     }
 
@@ -58,7 +58,7 @@ public class HDPictureTagRVAdapter extends RecyclerView.Adapter<HDPictureTagRVAd
         if(onTVWithUrlInRvClickToDoListener != null){
             switch (v.getId()){
                 case R.id.rv_hd_picture_tag_tv:
-                    onTVWithUrlInRvClickToDoListener.onTvItemClick(v, (String)v.getTag());
+                    onTVWithUrlInRvClickToDoListener.onTvItemClick(v, v.getTag());
                     break;
             }
         }

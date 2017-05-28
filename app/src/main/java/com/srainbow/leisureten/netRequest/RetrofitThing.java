@@ -14,10 +14,24 @@ import rx.schedulers.Schedulers;
  * Created by SRainbow on 2016/9/29.
  */
 public class RetrofitThing {
-    public static RequestApi juheApi;
-    public static RequestApi showApi;
+    private static RequestApi juheApi;
+    private static RequestApi juheRandomApi;
+    private static RequestApi showApi;
+    private static RequestApi backgroundApi;
 
-    public RequestApi getJuHeApi(){
+    private RequestApi getBackgroundApi(){
+        if(backgroundApi == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Constant.PHONE_IP)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            backgroundApi = retrofit.create(RequestApi.class);
+        }
+        return backgroundApi;
+    }
+
+    private RequestApi getJuHeApi(){
         if(juheApi == null){
             Retrofit retrofit=new Retrofit.Builder()
                     .baseUrl(Constant.BASERURL_JUHU)
@@ -29,7 +43,19 @@ public class RetrofitThing {
         return juheApi;
     }
 
-    public RequestApi getShowApi(){
+    private RequestApi getJuheRandomApi () {
+        if(juheRandomApi == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Constant.BASERURL_JUHU_RANDOM)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            juheRandomApi = retrofit.create(RequestApi.class);
+        }
+        return juheRandomApi;
+    }
+
+    private RequestApi getShowApi(){
         if(showApi == null){
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Constant.BASEURL_PICCLASSIFICATIONURL)
@@ -41,16 +67,32 @@ public class RetrofitThing {
         return showApi;
     }
 
-    public void onFunnyPicResponse(SubscriberByTag subscriber){
-        getJuHeApi().getFunnyPicData(Constant.JUHE_KEY)
+    public void onFunnyPicResponse(String sort, int page, int size, String time, SubscriberByTag subscriber){
+        getJuHeApi().getFunnyPicData(sort, page, size, time, Constant.JUHE_KEY)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
 
-    public void onJokeResponse(SubscriberByTag subscriber){
-        getJuHeApi().getJokeData(Constant.JUHE_KEY)
+    public void onRandomFunnyPicResponse (SubscriberByTag subscriber) {
+        getJuheRandomApi().getRandomFunnyPicData(Constant.JUHE_KEY)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void onJokeResponse(String sort, int page, int size, String time, SubscriberByTag subscriber){
+        getJuHeApi().getJokeData(sort, page, size, time, Constant.JUHE_KEY)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void onRandomJokeResponse(SubscriberByTag subscriber){
+        getJuheRandomApi().getRandomJokeData(Constant.JUHE_KEY)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,6 +110,14 @@ public class RetrofitThing {
     public void onShowApiPicContentResponse(String type, String page, SubscriberByTag subscriber){
         getShowApi().getShowApiContentData(Constant.SHOWAPI_APPID, Constant.SHOWAPI_SIGN,
                 type, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void onLoginResponse(String username, String password, SubscriberByTag subscriber){
+        getBackgroundApi().getLoginResult(username, password)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

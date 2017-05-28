@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,6 +28,10 @@ public class ContentShowActivity extends BaseActivity {
     TextView mTvRefreshFailedPrompt;
     @Bind(R.id.content_loadmore_failed_prompt_tv)
     TextView mTvLoadMoreFailedPrompt;
+    @Bind(R.id.content_include)
+    Toolbar mToolBar;
+    @Bind(R.id.layout_title_tv)
+    TextView mTvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class ContentShowActivity extends BaseActivity {
     }
 
     public void initViews(){
+        initTb();
         switch (classification){
             case "趣图":
                 mPictureFragment = PictureFragment.newInstance();
@@ -56,6 +62,17 @@ public class ContentShowActivity extends BaseActivity {
                 mTransaction.commit();
                 break;
         }
+    }
+
+    public void initTb(){
+        mTvTitle.setText(classification);
+        mToolBar.setNavigationIcon(R.drawable.ic_back);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentShowActivity.this.finish();
+            }
+        });
     }
 
     public void showRefreshFailedPrompt(){

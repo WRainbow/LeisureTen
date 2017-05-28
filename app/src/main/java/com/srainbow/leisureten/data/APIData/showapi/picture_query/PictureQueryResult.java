@@ -5,8 +5,14 @@ package com.srainbow.leisureten.data.APIData.showapi.picture_query;
  */
 
 public class PictureQueryResult {
+
+    //返回标志
     private int showapi_res_code;
+
+    //错误信息
     private String showapi_res_error;
+
+    //返回数据
     private PictureQueryResultBody showapi_res_body;
 
     public PictureQueryResult(int showapi_res_code, String showapi_res_error, PictureQueryResultBody shoapi_res_body) {

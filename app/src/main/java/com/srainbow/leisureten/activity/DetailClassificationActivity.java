@@ -31,7 +31,8 @@ public class DetailClassificationActivity extends BaseActivity{
     private List<ClassificationDetail> mClassificationId;
     private MyViewPagerAdapter myViewPagerAdapter;
 
-    @Bind(R.id.detail_classification_tb)Toolbar mToobar;
+    @Bind(R.id.detail_classification_include)Toolbar mToobar;
+    @Bind(R.id.layout_title_tv)TextView mTvTitle;
     @Bind(R.id.detail_classification_tlayout)TabLayout mTabLayout;
     @Bind(R.id.detail_classification_vp)ViewPager mViewPager;
     @Bind(R.id.detail_classification_load_tv)TextView mTvLoad;
@@ -42,11 +43,27 @@ public class DetailClassificationActivity extends BaseActivity{
         ButterKnife.bind(this);
         initParameter();
         initData();
+        initView();
     }
 
     public void initParameter(){
         classificationName = getIntent().getStringExtra("classificationName");
         mClassificationId = new ArrayList<>();
+    }
+
+    public void initView(){
+        initTb();
+    }
+
+    public void initTb(){
+        mTvTitle.setText(classificationName);
+        mToobar.setNavigationIcon(R.drawable.ic_back);
+        mToobar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetailClassificationActivity.this.finish();
+            }
+        });
     }
 
     public void initData(){

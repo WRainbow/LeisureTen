@@ -5,8 +5,14 @@ package com.srainbow.leisureten.data.APIData.showapi.picture_classification;
  */
 
 public class PictureClassificationResult {
+
+    //返回标志
     private int showapi_res_code;
+
+    //错误信息
     private String showapi_res_error;
+
+    //返回数据
     private PictureClassificationResultBody showapi_res_body;
 
     public PictureClassificationResult(int showapi_res_code, String showapi_res_error, PictureClassificationResultBody showapi_res_body) {

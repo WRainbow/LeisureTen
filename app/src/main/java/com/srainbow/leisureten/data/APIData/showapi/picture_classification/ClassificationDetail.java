@@ -5,7 +5,11 @@ package com.srainbow.leisureten.data.APIData.showapi.picture_classification;
  */
 
 public class ClassificationDetail {
+
+    //分类id
     private String id;
+
+    //分类名称
     private String name;
 
     public ClassificationDetail(String id, String name) {

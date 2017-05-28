@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.view.ViewGroup.LayoutParams;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.frame.jazzyviewpager.JazzyViewPager;
 import com.srainbow.leisureten.frame.jazzyviewpager.OutlineContainer;
@@ -35,7 +36,8 @@ public class JazzyViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_jazzy_adapter, container, false);
         ImageView mIvShowPic = (ImageView)view.findViewById(R.id.layout_pic_iv);
-        Glide.with(mContext).load(imgUrlList.get(position)).into(mIvShowPic);
+        Glide.with(mContext).load(imgUrlList.get(position)).diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(mIvShowPic);
 //        mIvShowPic.setPadding(30, 30, 30, 30);
         container.addView(view, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mJazzy.setObjectForPosition(view, position);

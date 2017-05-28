@@ -5,16 +5,23 @@ package com.srainbow.leisureten.data.APIData;
  */
 
 public class ImgWithAuthor {
+
     //有下一页时nextPage为1，否则为0
     private int nextPage;
+
     //有上一页时prePage为1，否则为0
     private int prePage;
+
     //下一页url
     private String nextUrl;
+
     //上一页url
     private String preUrl;
 
+    //图片地址
     private String imgUrl;
+
+    //图片作者
     private String imgAuthor;
 
     public ImgWithAuthor(){}

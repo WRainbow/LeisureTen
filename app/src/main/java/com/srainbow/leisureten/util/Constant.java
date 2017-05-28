@@ -20,7 +20,13 @@ public class Constant {
         return instance;
     }
 
-    public static final String BASERURL_JUHU = "https://v.juhe.cn/";
+    public static final String PHONE_IP = "http://192.168.42.199:8080/";
+    public static final String PHONE_IP1 = "http://192.168.42.124:8080/";
+    public static final String PHONE_IP2 = "http://192.168.1.109:8080/";
+    public static final String REQUEST_URL= "LeisureTen/MultiServlet";
+
+    public static final String BASERURL_JUHU_RANDOM = "https://v.juhe.cn/";
+    public static final String BASERURL_JUHU = "http://japi.juhe.cn/joke/";
     public static final String JUHE_KEY = "b3c10341bc734b752fa7cb47b1fb0641";
     public static final String ADDRESS_PICJUMBO = "https://picjumbo.com/";
     public static final String SHOWAPI_APPID = "34505";
@@ -45,4 +51,15 @@ public class Constant {
 
     public static final String USERNAME_PATTERN = "^[a-zA-Z]\\w{1,14}$";
     public static final String PASSWORD_PATTERN = "^[a-zA-Z0-9]{5,15}$";
+
+    public static final String SharedPreferencesName = "userName";
+
+    public static final int LOGIN_TAG = 1;
+    public static final int REGISTER_TAG = 2;
+    public static final int PICTURE_COLLECTION_TAG = 3;
+    public static final int JOKE_COLLECTION_TAG = 4;
+    public static final int ATLAS_COLLECTION_TAG = 5;
+    public static final int PICTURE_COLLECTION_CANCEL_TAG = 6;
+    public static final int JOKE_COLLECTION_CANCEL_TAG = 7;
+    public static final int ATLAS_COLLECTION_CANCEL_TAG = 8;
 }

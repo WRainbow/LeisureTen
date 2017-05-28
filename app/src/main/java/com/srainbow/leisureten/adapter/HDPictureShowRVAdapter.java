@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
@@ -45,7 +46,9 @@ public class HDPictureShowRVAdapter extends RecyclerView.Adapter<HDPictureShowRV
 
     @Override
     public void onBindViewHolder(HDPictureShowHolder holder, int position) {
-        Glide.with(mContext).load("http:" + imgWithAuthorList.get(position).getImgUrl()).into(holder.mRectIv);
+        Glide.with(mContext).load("http:" + imgWithAuthorList.get(position).getImgUrl())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(holder.mRectIv);
         holder.mTvAuther.setText(String.format(
                 mContext.getResources().getString(R.string.imgAuthor), imgWithAuthorList.get(position).getImgAuthor()));
         //set Collection ImageView tag

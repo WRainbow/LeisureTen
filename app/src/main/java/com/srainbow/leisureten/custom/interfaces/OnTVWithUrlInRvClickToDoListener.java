@@ -7,5 +7,5 @@ import android.view.View;
  */
 
 public interface OnTVWithUrlInRvClickToDoListener {
-    void onTvItemClick(View v, String url);
+    void onTvItemClick(View v, Object o);
 }

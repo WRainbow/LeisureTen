@@ -179,34 +179,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .subscribe(subscriber);
     }
 
-    public void initRx(){
-        Observable.create(new Observable.OnSubscribe<List<TagDetail>>(){
-
-            @Override
-            public void call(Subscriber<? super List<TagDetail>> subscriber){
-
-            }
-        }).subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<TagDetail>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<TagDetail> tagDetails) {
-
-                    }
-                });
-    }
-
     @Override
     public void onClick(View view) {
         Intent intent;
@@ -258,8 +230,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             //userName clicked
             case R.id.nav_header_username_tv:
-                showMessageByString("UserName");
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), Constant.LOGIN_TAG);
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             default:
@@ -268,10 +239,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public void onTvItemClick(View v, String url) {
-        Log.e("onTvItemClick", url);
+    public void onTvItemClick(View v, Object o) {
         Intent intent = new Intent(MainActivity.this, HDPictureShowActivity.class);
-        intent.putExtra("tagUrl", url);
+        intent.putExtra("tag", ((TagDetail)o).getTag());
+        intent.putExtra("tagUrl", ((TagDetail)o).getUrl());
         startActivity(intent);
     }
 
@@ -310,10 +281,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
-            case 1:
+            case Constant.LOGIN_TAG:
                 if(resultCode == RESULT_OK){
-                    if(getIntent().getExtras().getString("userName") != null){
-                        userName = getIntent().getExtras().getString("userName");
+                    if(data.getExtras().getString("userName") != null){
+                        userName = data.getExtras().getString("userName");
                         mTvUserName.setText(userName);
                     }
                 }
@@ -337,5 +308,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 return "时尚伊人";
         }
         return null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveUserNameToSP("null");
     }
 }

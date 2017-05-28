@@ -5,8 +5,14 @@ package com.srainbow.leisureten.data.APIData.showapi.picture_query;
  */
 
 public class PictureSizeUrl {
+
+    //大图地址
     private String big;
+
+    //小图地址
     private String small;
+
+    //中图地址
     private String middle;
 
     public PictureSizeUrl(String big, String small, String middle) {

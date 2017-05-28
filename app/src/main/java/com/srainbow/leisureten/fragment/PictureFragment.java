@@ -16,7 +16,10 @@ import android.widget.Toast;
 
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
+import com.srainbow.leisureten.data.APIData.RandomFunnyPicData;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
+import com.srainbow.leisureten.netRequest.BackgroundRequestTask;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 import com.srainbow.leisureten.R;
@@ -25,8 +28,12 @@ import com.srainbow.leisureten.adapter.PictureRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
 import com.srainbow.leisureten.data.APIData.FunnyPicData;
 import com.srainbow.leisureten.data.APIData.FunnyPicDetail;
+import com.srainbow.leisureten.util.Constant;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,11 +45,14 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class PictureFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnItemWithParamViewClickListener, View.OnClickListener{
+        OnItemWithParamViewClickListener, View.OnClickListener, OnResponseListener{
 
+    private String userName = "";
+    private int page = 1;
     private LinearLayoutManager linearLayoutManager;
     private PictureRVAdapter mPictureRVAdapter;
     private List<FunnyPicDetail> funnyPicDetails;
+    private View showV, hideV;
 
     @Bind(R.id.picfragment_content_rv)
     RecyclerView mRVFunnyPicture;
@@ -75,6 +85,7 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
     }
 
     public void initVars(){
+        userName = getUserNameFromSP(getActivity());
         funnyPicDetails = new ArrayList<>();
         loadDataByTag("init");
     }
@@ -104,7 +115,20 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
     }
 
     public void loadDataByTag(String tag){
-        RetrofitThing.getInstance().onFunnyPicResponse(new SubscriberByTag(tag, PictureFragment.this));
+        switch (tag){
+            case "init":
+                RetrofitThing.getInstance().onFunnyPicResponse("desc", page, 10, String.valueOf(new Date().getTime()/1000),
+                        new SubscriberByTag(tag, PictureFragment.this));
+                break;
+            case "loadMore":
+                page ++;
+                RetrofitThing.getInstance().onFunnyPicResponse("desc", page, 10, String.valueOf(new Date().getTime()/1000),
+                        new SubscriberByTag(tag, PictureFragment.this));
+                break;
+            case "refresh":
+                RetrofitThing.getInstance().onRandomFunnyPicResponse(new SubscriberByTag(tag, PictureFragment.this));
+                break;
+        }
     }
 
     @Override
@@ -125,47 +149,93 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
                 break;
             //Collection ImageView Clicked
             case R.id.layout_collection_iv:
-                if(BackGroundRequest.getInstance().addFunnyPic((FunnyPicDetail)o)){
-                    showMessageByString("已收藏");
-                    showAndHideView(anther, v);
-                }else{
-                    showMessageByString("收藏失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    BackGroundRequest.getInstance().addFunnyPic(this, Constant.PICTURE_COLLECTION_TAG,
+                            userName,  (FunnyPicDetail)o);
+                    this.hideV = v;
+                    this.showV = anther;
+
                 }
                 break;
             //cancel collection imageView clicked
             case R.id.layout_collection_down_iv:
-                if(BackGroundRequest.getInstance().deleteFunnyPic((FunnyPicDetail)o)){
-                    showMessageByString("取消收藏");
-                    showAndHideView(anther, v);
-                }else{
-                    showMessageByString("取消收藏失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    BackGroundRequest.getInstance().deletePicture(this, Constant.PICTURE_COLLECTION_CANCEL_TAG,
+                            userName, ((FunnyPicDetail)o).getUrl());
+                    this.hideV = v;
+                    this.showV = anther;
+
                 }
                 break;
             //Download ImageView Clicked
             case R.id.layout_download_iv:
-                showMessageByString("开始下载");
-                if(BackGroundRequest.getInstance().downLoadImage(((FunnyPicDetail)o).getUrl())){
-                    showMessageByString("下载成功");
-                }else{
-                    showMessageByString("下载失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    showMessageByString("开始下载");
+                    if(BackGroundRequest.getInstance().downLoadImage(((FunnyPicDetail)o).getUrl())){
+                        showMessageByString("下载成功");
+                    }else{
+                        showMessageByString("下载失败");
+
+                    }
                 }
+
                 break;
         }
     }
 
     @Override
+    public void result(JSONObject result, int tag) {
+        if(result != null){
+            switch (tag){
+                case Constant.PICTURE_COLLECTION_TAG:
+                    if ("true".equals(result.optString("result"))) {
+                        showMessageByString("收藏成功");
+                        showAndHideView(showV, hideV);
+                    } else if ("false".equals(result.optString("result"))) {
+                        showMessageByString("收藏失败");
+                    } else {
+                        showMessageByString("未知错误");
+
+                    }
+                    break;
+                case Constant.PICTURE_COLLECTION_CANCEL_TAG:
+                    if ("true".equals(result.optString("result"))) {
+                        showMessageByString("取消收藏成功");
+                        showAndHideView(showV, hideV);
+                    } else if ("false".equals(result.optString("result"))) {
+                        showMessageByString("取消收藏失败");
+                    } else {
+                        showMessageByString("未知错误");
+                    }
+                    break;
+            }
+        } else {
+            showMessageByString("网络错误");
+        }
+    }
+
+    @Override
     public void onCompleted(String tag) {
+        //刷新RecyclerView数据
+        mPictureRVAdapter.notifyDataSetChanged();
+
         mLlayoutLoadFailed.setVisibility(View.GONE);
         mRVFunnyPicture.setVisibility(View.VISIBLE);
         switch (tag){
             case "init":
-                Toast.makeText(getActivity(),"init完成: " + funnyPicDetails.size(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"init完成: " + funnyPicDetails.size(), Toast.LENGTH_SHORT).show();
                 break;
             case "loadMore":
-                Toast.makeText(getActivity(),"loadMore完成: " + funnyPicDetails.size(), Toast.LENGTH_SHORT).show();
+                showMessageByString("加载完成");
                 break;
             case "refresh":
-                Toast.makeText(getActivity(),"refresh完成: " + funnyPicDetails.size(), Toast.LENGTH_SHORT).show();
+                showMessageByString("刷新完成");
                 mSRefresh.setRefreshing(false);
                 break;
         }
@@ -196,38 +266,46 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
 
     @Override
     public void onNext(String tag, Object o) {
-        if(o==null||((FunnyPicData)o).result.isEmpty()){
-            Toast.makeText(getActivity(),"没有数据了",Toast.LENGTH_SHORT).show();
-        }else{
-            switch (tag){
+        switch (tag){
 
-                //初始化数据
-                case "init":
+            //初始化数据
+            case "init":
+
+                if(o==null||((FunnyPicData)o).result.data.isEmpty()){
+                    Toast.makeText(getActivity(),"没有数据了",Toast.LENGTH_SHORT).show();
+                }else{
+
                     //向funnyPicDetails中填充数据
                     funnyPicDetails.clear();
-                    for(FunnyPicDetail detail : ((FunnyPicData)o).result){
+                    for(FunnyPicDetail detail : ((FunnyPicData)o).result.data){
                         funnyPicDetails.add(detail);
                     }
 
-                    //刷新RecyclerView数据
-                    mPictureRVAdapter.notifyDataSetChanged();
-                    break;
+                }
+                break;
 
-                //加载更多
-                case "loadMore":
+            //加载更多
+            case "loadMore":
+                if(o==null||((FunnyPicData)o).result.data.isEmpty()){
+                    Toast.makeText(getActivity(),"没有数据了",Toast.LENGTH_SHORT).show();
+                }else{
+
                     //向funnyPicDetails中添加数据
-                    for(FunnyPicDetail detail : ((FunnyPicData)o).result){
+                    for(FunnyPicDetail detail : ((FunnyPicData)o).result.data){
                         funnyPicDetails.add(detail);
                     }
 
-                    //刷新RecyclerView数据
-                    mPictureRVAdapter.notifyDataSetChanged();
-                    break;
+                }
+                break;
 
-                //刷新数据
-                case "refresh":
+            //刷新数据
+            case "refresh":
+                if(o==null||((RandomFunnyPicData)o).result.isEmpty()){
+                    Toast.makeText(getActivity(),"没有数据了",Toast.LENGTH_SHORT).show();
+                }else{
+
                     //获取返回数据集合
-                    List<FunnyPicDetail> details = ((FunnyPicData)o).result;
+                    List<FunnyPicDetail> details = ((RandomFunnyPicData)o).result;
                     for(FunnyPicDetail detail : funnyPicDetails){
                         details.add(detail);
                     }
@@ -240,12 +318,11 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
                         funnyPicDetails.add(detail);
                     }
 
-                    //刷新RecyclerView数据
-                    mPictureRVAdapter.notifyDataSetChanged();
-                    break;
-            }
+                }
+                break;
         }
 
 
     }
+
 }

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
@@ -49,6 +50,7 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
         List<PictureSizeUrl> sizeUrlList = pictureContentList.get(position).getList();
         //加载图片
         Glide.with(mContext).load(sizeUrlList.get((int) (Math.random() * sizeUrlList.size() - 1)).getMiddle())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.mIvShowPicture);
         //设置title
         holder.mTvDescription.setText(pictureContentList.get(position).getTitle());

@@ -21,6 +21,7 @@ import com.srainbow.leisureten.activity.ShowAtlasDetailActivity;
 import com.srainbow.leisureten.adapter.BeautifulRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryResult;
 import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryResultBody;
@@ -29,6 +30,9 @@ import com.srainbow.leisureten.fragment.BaseFragment;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
+import com.srainbow.leisureten.util.Constant;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +46,11 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class BeautifulCollectionBaseFragment extends BaseFragment implements SubscriberByTag.onSubscriberByTagListener,
-        OnItemWithParamViewClickListener, View.OnClickListener{
+        OnItemWithParamViewClickListener, View.OnClickListener, OnResponseListener{
 
     private static final String ARG_PARAM1 = "param1";
     private String mParam1 = "null";
+    private String userName = "";
     //如果加载了再次进入页面时不需要重新加载，使用isLoading进行判断，每次加载完成isLoading设置为false；
     private boolean isLoading = false;
     //同时满足isVisible和isCreateView都为true时在进行加载数据（懒加载模式）;
@@ -53,6 +58,7 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
     private boolean isCreateView=false;
     private int currentPage = 1;
     private int allPage = 1;
+    private View showV, hideV;
 
     private PictureQueryResultBody resultBody;
     private List<PictureContent> pictureContentList;
@@ -109,6 +115,7 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
         }else {
             v = inflater.inflate(R.layout.fragment_beatiful_collection_base, container, false);
             ButterKnife.bind(this, v);
+            initVar();
             initView();
             isCreateView = true;
             lazyLoad();
@@ -129,6 +136,10 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
         initRv();
         mTvPrePage.setOnClickListener(this);
         mTvNextPage.setOnClickListener(this);
+    }
+
+    public void initVar(){
+        userName = getUserNameFromSP(getActivity());
     }
 
     public void initRv(){
@@ -237,29 +248,40 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
                 break;
             //收藏
             case R.id.layout_collection_iv:
-                if(BackGroundRequest.getInstance().addBeautifulAtlas(pictureContent)){
-                    showMessageByString("已收藏");
-                    showAndHideView(anther, v);
-                }else{
-                    showMessageByString("收藏失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    BackGroundRequest.getInstance().addBeautifulAtlas(this, Constant.ATLAS_COLLECTION_TAG,
+                            userName, pictureContent);
+                    this.hideV = v;
+                    this.showV = anther;
+
                 }
                 break;
             //取消收藏
             case R.id.layout_collection_down_iv:
-                if(BackGroundRequest.getInstance().deleteBeautifulAtlas(pictureContent)){
-                    showMessageByString("取消收藏");
-                    showAndHideView(anther, v);
-                }else{
-                    showMessageByString("取消收藏失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    BackGroundRequest.getInstance().deleteBeautifulAtlas(this, Constant.ATLAS_COLLECTION_CANCEL_TAG,
+                            userName, pictureContent.getItemId());
+                    this.hideV = v;
+                    this.showV = anther;
+
                 }
                 break;
             //下载
             case R.id.layout_download_iv:
-                showMessageByString("正在下载");
-                if(BackGroundRequest.getInstance().downLoadAtlas(pictureContent)){
-                    showMessageByString("下载成功");
-                }else{
-                    showMessageByString("下载失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    showMessageByString("正在下载");
+                    if(BackGroundRequest.getInstance().downLoadAtlas(pictureContent)){
+                        showMessageByString("下载成功");
+                    }else{
+                        showMessageByString("下载失败");
+                    }
+
                 }
                 break;
         }
@@ -311,30 +333,32 @@ public class BeautifulCollectionBaseFragment extends BaseFragment implements Sub
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        unbindDrawables(v.findViewById(R.id.beautiful_base_iv));
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        unbindDrawables(v.findViewById(R.id.beautiful_base_iv));
-    }
-
-    private void unbindDrawables(View view) {
-        Log.e("unbind", "unbind" + view.getId());
-        if (view.getBackground() != null)
-        {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup && !(view instanceof AdapterView))
-        {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
-            {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
+    public void result(JSONObject result, int tag) {
+        if (result != null) {
+            switch (tag) {
+                case Constant.ATLAS_COLLECTION_TAG:
+                    if ("true".equals(result.optString("result"))) {
+                        showMessageByString("收藏成功");
+                        showAndHideView(showV, hideV);
+                    }  else if ("false".equals(result.optString("result"))) {
+                        showMessageByString("收藏失败");
+                    } else {
+                        showMessageByString("未知错误");
+                    }
+                    break;
+                case Constant.ATLAS_COLLECTION_CANCEL_TAG:
+                    if ("true".equals(result.optString("result"))) {
+                        showMessageByString("取消收藏成功");
+                        showAndHideView(showV, hideV);
+                    }  else if ("false".equals(result.optString("result"))) {
+                        showMessageByString("取消收藏失败");
+                    } else {
+                        showMessageByString("未知错误");
+                    }
+                    break;
             }
-            ((ViewGroup) view).removeAllViews();
+        } else {
+            showMessageByString("网络错误");
         }
     }
 }

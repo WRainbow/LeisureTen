@@ -6,9 +6,13 @@ import java.util.List;
  * Created by SRainbow on 2017/5/12.
  */
 
-public class PictureClassificationResultBody {
-    private int ret_code;
-    private List<Classification> list;
+    public class PictureClassificationResultBody {
+
+        //返回代码
+        private int ret_code;
+
+        //分类列表
+        private List<Classification> list;
 
     public PictureClassificationResultBody(int ret_code, List<Classification> list) {
         this.ret_code = ret_code;

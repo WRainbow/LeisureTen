@@ -5,7 +5,11 @@ package com.srainbow.leisureten.data.APIData;
  */
 
 public class TagData {
+
+    //错误代码
     private int code = -1;//默认失败
+
+    //返回值
     private TagDetail data;
 
 

@@ -1,10 +1,13 @@
 package com.srainbow.leisureten.activity;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import com.srainbow.leisureten.util.Constant;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -26,5 +29,15 @@ public class BaseActivity extends AppCompatActivity {
     public void showAndHideView(View toShow, View toHide){
         toShow.setVisibility(View.VISIBLE);
         toHide.setVisibility(View.GONE);
+    }
+
+    public void saveUserNameToSP(String userName) {
+        SharedPreferences sp = getSharedPreferences(Constant.SharedPreferencesName, MODE_PRIVATE);
+        sp.edit().putString("userName", userName).apply();
+    }
+
+    public String getUserNameFromSP() {
+        SharedPreferences sp = getSharedPreferences(Constant.SharedPreferencesName, MODE_PRIVATE);
+        return sp.getString("userName", "null");
     }
 }

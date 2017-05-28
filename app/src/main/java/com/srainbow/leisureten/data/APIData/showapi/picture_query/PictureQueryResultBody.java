@@ -5,7 +5,11 @@ package com.srainbow.leisureten.data.APIData.showapi.picture_query;
  */
 
 public class PictureQueryResultBody {
+
+    //返回代码
     private int ret_code;
+
+    //返回体数据
     private PicturePageBean pagebean;
 
     public PictureQueryResultBody(int ret_code, PicturePageBean pagebean) {

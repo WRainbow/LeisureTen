@@ -7,11 +7,23 @@ import java.util.List;
  */
 
 public class PictureContent {
+
+    //类型名
     private String typeName;
+
+    //图集描述
     private String title;
+
+    //图片列表
     private List<PictureSizeUrl> list;
+
+    //图集id
     private String itemId;
+
+    //类型id
     private String type;
+
+    //更新时间
     private String ct;
 
     public PictureContent(String typeName, String title, List<PictureSizeUrl> list, String itemId, String type, String ct) {

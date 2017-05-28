@@ -5,67 +5,97 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_vertical_margin"
     tools:context="com.srainbow.leisureten.activity.RegisterActivity">
 
-    <android.support.design.widget.TextInputLayout
+    <include
+        android:id="@+id/register_include"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp">
-
-        <EditText
-            android:id="@+id/register_username_et"
+        android:layout_height="50dp"
+        layout="@layout/layout_toolbar"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/userNameRegister"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:imeOptions="actionNext"/>
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true">
+            android:layout_marginTop="35dp">
 
-        <EditText
-            android:id="@+id/register_password_et"
+            <EditText
+                android:id="@+id/register_username_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/userNameRegister"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:imeOptions="actionNext"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/passWordRegister"
-            android:imeActionId="@+id/register"
-            android:imeActionLabel="@string/register"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:maxLength="16"
-            android:imeOptions="actionNext"/>
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true">
 
-        <EditText
-            android:id="@+id/register_password_confirm_et"
+            <EditText
+                android:id="@+id/register_password_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/passWordRegister"
+                android:imeActionId="@+id/register"
+                android:imeActionLabel="@string/register"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:maxLength="16"
+                android:imeOptions="actionNext"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/passWordConfirm"
-            android:imeActionId="@+id/register"
-            android:imeActionLabel="@string/register"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:maxLength="16"
-            android:imeOptions="actionDone"/>
-    </android.support.design.widget.TextInputLayout>
+            app:passwordToggleEnabled="true">
 
-    <Button
-        android:id="@+id/register_register_bt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="?android:textAppearanceMedium"
-        android:layout_marginTop="26dp"
-        android:padding="16dp"
-        android:text="@string/register"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold"
-        android:background="@color/colorPrimary500"/>
+            <EditText
+                android:id="@+id/register_password_confirm_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/passWordConfirm"
+                android:imeActionId="@+id/register"
+                android:imeActionLabel="@string/register"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:maxLength="16"
+                android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="26dp">
+            <EditText android:id="@+id/register_code_et"
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                android:inputType="textVisiblePassword"
+                android:hint="@string/writeIdentifyingCode"/>
+            <ImageView android:id="@+id/register_showcode_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView android:id="@+id/register_changecode_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8sp"
+                android:text="@string/clickToChange"
+                android:textSize="12sp"
+                android:textColor="#7E9AEE"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/register_register_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:textAppearanceMedium"
+            android:layout_marginTop="26dp"
+            android:padding="16dp"
+            android:text="@string/register"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:background="@color/colorPrimary500"/>
+    </LinearLayout>
+
 </LinearLayout>

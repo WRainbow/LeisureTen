@@ -14,9 +14,13 @@ import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.adapter.HDPictureShowRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
+import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
 import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
+import com.srainbow.leisureten.util.Constant;
 import com.srainbow.leisureten.util.HtmlParserWithJSoup;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +32,22 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HDPictureShowActivity extends BaseActivity implements OnClickListener, OnItemWithParamViewClickListener {
+public class HDPictureShowActivity extends BaseActivity implements OnClickListener,
+        OnItemWithParamViewClickListener, OnResponseListener {
 
-    private static  String URL = "";
+    private String userName = "";
+    private String URL = "", TAG = "";
 
     private HDPictureShowRVAdapter mHDPictureShowRVAdapter;
     private LinearLayoutManager linearLayoutManager;
     private List<ImgWithAuthor> imgWithAuthorList;
     private String prePageUrl = "", nextPageUrl = "";
+    private View showV, hideV;
 
-    @Bind(R.id.hdpicture_show_toolbar)
+    @Bind(R.id.hdpicture_include)
     Toolbar mToolbar;
+    @Bind(R.id.layout_title_tv)
+    TextView mTvTitle;
     @Bind(R.id.hdpicture_show_rv)
     RecyclerView mRVShowHDPicture;
     @Bind(R.id.hdpicture_page_include)
@@ -55,8 +64,9 @@ public class HDPictureShowActivity extends BaseActivity implements OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hdpicture_show);
         ButterKnife.bind(this);
-        initViews();
         initVars();
+        initViews();
+        rxJava();
     }
 
     public void initViews(){
@@ -69,12 +79,24 @@ public class HDPictureShowActivity extends BaseActivity implements OnClickListen
 
         mTvPrePage.setOnClickListener(this);
         mTvNextPage.setOnClickListener(this);
+        initTb();
+    }
+
+    public void initTb(){
+        mTvTitle.setText(TAG);
+        mToolbar.setNavigationIcon(R.drawable.ic_back);
+        mToolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HDPictureShowActivity.this.finish();
+            }
+        });
     }
 
     public void initVars(){
+        userName = getUserNameFromSP();
         URL = getIntent().getStringExtra("tagUrl");
-        Log.e("getUrl", URL);
-        rxJava();
+        TAG = getIntent().getStringExtra("tag");
     }
 
     public void rxJava(){
@@ -181,31 +203,71 @@ public class HDPictureShowActivity extends BaseActivity implements OnClickListen
         switch (v.getId()){
             //Collection ImageView clickListener
             case R.id.layout_collection_iv:
-                if(BackGroundRequest.getInstance().addHDPicture((ImgWithAuthor)o)){
-                    showMessageByString("已收藏");
-                    showAndHideView(anther, v);
-                }else{
-                    showMessageByString("取消收藏");
+                if ("null".equals(userName)) {
+                   showMessageByString("请先登录");
+                } else {
+                    BackGroundRequest.getInstance().addHDPicture(this, Constant.PICTURE_COLLECTION_TAG,
+                            userName, (ImgWithAuthor)o);
+                    this.hideV = v;
+                    this.showV = anther;
+
                 }
                 break;
             //cancel collection imageView clicked
             case R.id.layout_collection_down_iv:
-                if(BackGroundRequest.getInstance().deletedHDPicture((ImgWithAuthor)o)){
-                    showMessageByString("取消收藏");
-                    showAndHideView(anther, v);
-                }else{
-                    showMessageByString("取消收藏失败");
+                if ("null".equals(userName)) {
+                    showMessageByString("请先登录");
+                } else {
+                    BackGroundRequest.getInstance().deletePicture(this, Constant.PICTURE_COLLECTION_CANCEL_TAG,
+                            userName, ((ImgWithAuthor)o).getImgUrl());
+                    this.hideV = v;
+                    this.showV = anther;
                 }
                 break;
             //Download ImageView clickListener;
             case R.id.layout_download_iv:
-                showMessageByString("正在下载");
-                if(BackGroundRequest.getInstance().downLoadImage(((ImgWithAuthor)o).getImgUrl())){
-                    showMessageByString("下载成功");
-                }else{
-                    showMessageByString("下载失败");
+                if ("null".equals(userName)) {
+                   showMessageByString("请先登录");
+                } else {
+                    showMessageByString("正在下载");
+                    if(BackGroundRequest.getInstance().downLoadImage(((ImgWithAuthor)o).getImgUrl())){
+                        showMessageByString("下载成功");
+                    }else{
+                        showMessageByString("下载失败");
+                    }
+
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void result(JSONObject result, int tag) {
+        if (result != null) {
+            switch (tag) {
+                case Constant.PICTURE_COLLECTION_TAG:
+                    if ("true".equals(result.optString("result"))) {
+                        showMessageByString("收藏成功");
+                        showAndHideView(showV, hideV);
+                    } else if ("false".equals(result.optString("result"))) {
+                        showMessageByString("收藏失败");
+                    } else {
+                        showMessageByString("未知错误");
+                    }
+                    break;
+                case Constant.PICTURE_COLLECTION_CANCEL_TAG:
+                    if ("true".equals(result.optString("result"))) {
+                        showMessageByString("取消收藏成功");
+                        showAndHideView(showV, hideV);
+                    }  else if ("false".equals(result.optString("result"))) {
+                        showMessageByString("取消收藏失败");
+                    } else {
+                        showMessageByString("未知错误");
+                    }
+                    break;
+            }
+        } else {
+            showMessageByString("网络错误");
         }
     }
 }

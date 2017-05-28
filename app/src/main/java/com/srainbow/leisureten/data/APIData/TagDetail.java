@@ -5,7 +5,11 @@ package com.srainbow.leisureten.data.APIData;
  */
 
 public class TagDetail {
+
+    //标签名
     private String tag;
+
+    //图片地址
     private String url;
 
     public TagDetail() {

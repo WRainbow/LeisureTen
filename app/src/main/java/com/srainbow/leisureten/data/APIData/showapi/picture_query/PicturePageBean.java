@@ -7,10 +7,20 @@ import java.util.List;
  */
 
 public class PicturePageBean {
+
+    //总页数
     private int allPages;
+
+    //图集列表
     private List<PictureContent> contentlist;
+
+    //当前页
     private int currentPage;
+
+    //图集总数
     private int allNum;
+
+    //每页图集最大数
     private int maxResult;
 
     public PicturePageBean(int allPages, List<PictureContent> contentlist, int currentPage, int allNum, int maxResult) {

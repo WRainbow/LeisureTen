@@ -6,13 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.srainbow.leisureten.activity.ShowAtlasDetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/atlas_detail_tb"
+    <include
+        android:id="@+id/atlas_detail_tb_include"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary500">
-
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content"
+        layout="@layout/layout_toolbar"/>
     <include
         android:id="@+id/atlas_detail_include"
         android:layout_width="match_parent"
@@ -24,7 +22,7 @@
         android:id="@+id/atlas_detail_jvp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/atlas_detail_tb"
+        android:layout_below="@id/atlas_detail_tb_include"
         android:layout_above="@id/atlas_detail_include"
         app:style="tablet"
         app:fadeEnabled="true"

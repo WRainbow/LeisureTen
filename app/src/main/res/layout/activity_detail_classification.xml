@@ -7,15 +7,14 @@
     android:orientation="vertical"
     tools:context="com.srainbow.leisureten.activity.DetailClassificationActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/detail_classification_tb"
+    <include
+        android:id="@+id/detail_classification_include"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:minHeight="?attr/actionBarSize"
         app:layout_scrollFlags="scroll|enterAlways"
-        android:background="@color/colorPrimary500">
+        layout="@layout/layout_toolbar"/>
 
-    </android.support.v7.widget.Toolbar>
     <TextView
         android:id="@+id/detail_classification_load_tv"
         android:layout_width="wrap_content"

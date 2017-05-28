@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
@@ -68,7 +69,8 @@ public class PictureRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ItemViewHolder itemViewHolder = (ItemViewHolder)holder;
             String picUrl = funnyPicDetailList.get(position).url;
             //load image
-            Glide.with(mContext).load(picUrl).into(itemViewHolder.mRectIvPicture);
+            Glide.with(mContext).load(picUrl).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(itemViewHolder.mRectIvPicture);
             //set description
             itemViewHolder.mTvDescriptionText.setText(funnyPicDetailList.get(position).content);
             //set Collection ImageView tag (type: FunnyPicDetail)

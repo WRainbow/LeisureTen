@@ -2,21 +2,25 @@ package com.srainbow.leisureten.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.srainbow.leisureten.R;
+import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
+import com.srainbow.leisureten.netRequest.BackGroundRequest;
+import com.srainbow.leisureten.util.Constant;
+
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener{
+public class LoginActivity extends BaseActivity implements View.OnClickListener,
+        OnResponseListener{
 
     @Bind(R.id.login_login_bt)
     Button mBnLogin;
@@ -28,6 +32,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     TextView mTvToRegister;
     @Bind(R.id.login_tb)
     Toolbar mTbLogin;
+
+    private Gson result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +52,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     public void initView(){
-        mTbLogin.setNavigationIcon(R.drawable.ic_atlas);
+        mTbLogin.setNavigationIcon(R.drawable.ic_back);
         mTbLogin.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("test", "test");
                 LoginActivity.this.finish();
             }
         });
+
+        mTvToRegister.setOnClickListener(this);
+        mBnLogin.setOnClickListener(this);
     }
 
     @Override
@@ -62,9 +73,37 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.login_toregister_tv:
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
-            // click to login
+            // click to loginConfirm
             case R.id.login_login_bt:
+                String userName = mEtUsername.getText().toString();
+                String passWord = mEtPassword.getText().toString();
+                if(!"".equals(userName) && !"".equals(passWord)) {
+                    BackGroundRequest.getInstance().loginConfirm(this, Constant.LOGIN_TAG, userName, passWord);
+                }else{
+                    showMessageByString("用户名或密码不能为空");
+                }
+                break;
+        }
+    }
 
+    @Override
+    public void result(JSONObject result, int tag) {
+        switch (tag){
+            case Constant.LOGIN_TAG:
+                if (result != null) {
+                    if ("true".equals(result.optString("result"))) {
+                        saveUserNameToSP(mEtUsername.getText().toString());
+                        showMessageByString("登录成功");
+                        Intent intent = new Intent();
+                        intent.putExtra("userName", mEtUsername.getText().toString());
+                        setResult(RESULT_OK, intent);
+                        LoginActivity.this.finish();
+                    } else {
+                        showMessageByString("用户名或密码错误");
+                    }
+                } else {
+                    showMessageByString("网络错误");
+                }
                 break;
         }
     }

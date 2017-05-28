@@ -12,13 +12,22 @@ import java.util.Date;
  * Created by SRainbow on 2016/10/12.
  */
 public class MusicDetail implements Serializable{
+
+    //歌曲名称
     public String title;
+    //歌曲id
     public long id;
+    //歌曲专辑
     public String artist;
+    //歌曲时长
     public String duration;
+    //歌曲大小
     public String size;
+    //歌曲路径
     public String path;
+    //歌曲专辑id
     public int albumId;
+    //歌曲专辑信息
     public Uri albumUri;
 
     public MusicDetail(){
