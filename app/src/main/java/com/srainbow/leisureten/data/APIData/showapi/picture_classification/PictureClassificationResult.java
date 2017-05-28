@@ -1,4 +1,4 @@
-package com.srainbow.leisureten.data.APIData.showapi.picture_classification;
+package com.srainbow.leisureten.data.apidata.showapi.picture_classification;
 
 /**
  * Created by SRainbow on 2017/5/12.

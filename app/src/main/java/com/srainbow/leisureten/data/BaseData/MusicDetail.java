@@ -1,10 +1,8 @@
-package com.srainbow.leisureten.data.BaseData;
+package com.srainbow.leisureten.data.basedata;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

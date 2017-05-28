@@ -1,4 +1,4 @@
-package com.srainbow.leisureten.data.APIData.showapi.picture_query;
+package com.srainbow.leisureten.data.apidata.showapi.picture_query;
 
 /**
  * Created by SRainbow on 2017/5/12.
