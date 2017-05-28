@@ -1,6 +1,4 @@
-package com.srainbow.leisureten.data.APIData;
-
-import java.util.List;
+package com.srainbow.leisureten.data.apidata.juhe.funnypicture;
 
 /**
  * Created by SRainbow on 2016/10/10.

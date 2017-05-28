@@ -1,7 +1,7 @@
 package com.srainbow.leisureten.util;
 
-import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
-import com.srainbow.leisureten.data.APIData.TagData;
+import com.srainbow.leisureten.data.jsoupdata.ImgWithAuthor;
+import com.srainbow.leisureten.data.jsoupdata.TagData;
 
 import org.json.JSONException;
 import org.json.JSONObject;

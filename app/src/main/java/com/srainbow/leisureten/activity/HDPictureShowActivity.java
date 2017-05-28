@@ -12,10 +12,9 @@ import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.adapter.HDPictureShowRVAdapter;
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
-import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
+import com.srainbow.leisureten.data.jsoupdata.ImgWithAuthor;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.util.Constant;
 import com.srainbow.leisureten.util.HtmlParserWithJSoup;

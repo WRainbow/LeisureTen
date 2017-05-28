@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import com.srainbow.leisureten.data.APIData.showapi.picture_classification.ClassificationDetail;
+import com.srainbow.leisureten.data.apidata.showapi.picture_classification.ClassificationDetail;
 import com.srainbow.leisureten.fragment.BeatifulCollection.BeautifulCollectionBaseFragment;
 
 import java.util.ArrayList;

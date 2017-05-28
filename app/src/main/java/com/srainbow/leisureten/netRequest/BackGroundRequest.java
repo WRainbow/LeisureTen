@@ -3,12 +3,11 @@ package com.srainbow.leisureten.netRequest;
 import android.util.Log;
 
 import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
-import com.srainbow.leisureten.data.APIData.FunnyPicDetail;
-import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
-import com.srainbow.leisureten.data.APIData.JokeDetail;
-import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
-import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureSizeUrl;
-import com.srainbow.leisureten.util.Constant;
+import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicDetail;
+import com.srainbow.leisureten.data.jsoupdata.ImgWithAuthor;
+import com.srainbow.leisureten.data.apidata.juhe.joke.JokeDetail;
+import com.srainbow.leisureten.data.apidata.showapi.picture_query.PictureContent;
+import com.srainbow.leisureten.data.apidata.showapi.picture_query.PictureSizeUrl;
 
 import org.json.JSONArray;
 import org.json.JSONException;

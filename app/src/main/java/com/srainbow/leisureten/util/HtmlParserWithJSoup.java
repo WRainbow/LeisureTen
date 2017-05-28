@@ -2,9 +2,8 @@ package com.srainbow.leisureten.util;
 
 import android.util.Log;
 
-import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
-import com.srainbow.leisureten.data.APIData.TagDetail;
-import com.srainbow.leisureten.data.APIData.TagData;
+import com.srainbow.leisureten.data.jsoupdata.ImgWithAuthor;
+import com.srainbow.leisureten.data.jsoupdata.TagDetail;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

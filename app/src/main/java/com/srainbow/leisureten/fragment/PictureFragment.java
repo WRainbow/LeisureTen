@@ -14,20 +14,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
-import com.srainbow.leisureten.data.APIData.RandomFunnyPicData;
+import com.srainbow.leisureten.data.apidata.juhe.funnypicture.RandomFunnyPicData;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
-import com.srainbow.leisureten.netRequest.BackgroundRequestTask;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.activity.ContentShowActivity;
 import com.srainbow.leisureten.adapter.PictureRVAdapter;
-import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
-import com.srainbow.leisureten.data.APIData.FunnyPicData;
-import com.srainbow.leisureten.data.APIData.FunnyPicDetail;
+import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicData;
+import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicDetail;
 import com.srainbow.leisureten.util.Constant;
 
 import org.json.JSONObject;

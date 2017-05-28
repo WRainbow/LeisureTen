@@ -1,4 +1,4 @@
-package com.srainbow.leisureten.data.APIData;
+package com.srainbow.leisureten.data.jsoupdata;
 
 /**
  * Created by SRainbow on 2017/4/10.

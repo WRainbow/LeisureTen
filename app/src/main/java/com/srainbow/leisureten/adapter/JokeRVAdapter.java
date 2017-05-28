@@ -10,9 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
-import com.srainbow.leisureten.data.APIData.JokeDetail;
+import com.srainbow.leisureten.data.apidata.juhe.joke.JokeDetail;
 
 import java.util.List;
 

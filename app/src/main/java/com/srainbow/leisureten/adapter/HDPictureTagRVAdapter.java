@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnTVWithUrlInRvClickToDoListener;
-import com.srainbow.leisureten.data.APIData.TagDetail;
+import com.srainbow.leisureten.data.jsoupdata.TagDetail;
 
 import java.util.List;
 

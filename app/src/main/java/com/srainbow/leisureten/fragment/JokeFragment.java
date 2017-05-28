@@ -14,19 +14,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
-import com.srainbow.leisureten.data.APIData.RandomJokeData;
+import com.srainbow.leisureten.data.apidata.juhe.joke.RandomJokeData;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.activity.ContentShowActivity;
 import com.srainbow.leisureten.adapter.JokeRVAdapter;
-import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
-import com.srainbow.leisureten.data.APIData.JokeData;
-import com.srainbow.leisureten.data.APIData.JokeDetail;
+import com.srainbow.leisureten.data.apidata.juhe.joke.JokeData;
+import com.srainbow.leisureten.data.apidata.juhe.joke.JokeDetail;
 import com.srainbow.leisureten.util.Constant;
 
 import org.json.JSONObject;

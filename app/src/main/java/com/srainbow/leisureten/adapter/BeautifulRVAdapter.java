@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
-import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureContent;
-import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureSizeUrl;
+import com.srainbow.leisureten.data.apidata.showapi.picture_query.PictureContent;
+import com.srainbow.leisureten.data.apidata.showapi.picture_query.PictureSizeUrl;
 
 import java.util.List;
 

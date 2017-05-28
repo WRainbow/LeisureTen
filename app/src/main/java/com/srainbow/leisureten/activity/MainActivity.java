@@ -11,17 +11,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.adapter.HDPictureTagRVAdapter;
 import com.srainbow.leisureten.custom.interfaces.OnTVWithUrlInRvClickToDoListener;
-import com.srainbow.leisureten.data.APIData.TagDetail;
+import com.srainbow.leisureten.data.jsoupdata.TagDetail;
 import com.srainbow.leisureten.util.Constant;
 import com.srainbow.leisureten.util.HtmlParserWithJSoup;
 import com.srainbow.leisureten.widget.RectangleImageView;

@@ -1,7 +1,6 @@
 package com.srainbow.leisureten.adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
-import com.srainbow.leisureten.custom.interfaces.OnTVInRvClickToDoListener;
-import com.srainbow.leisureten.data.APIData.FunnyPicDetail;
+import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicDetail;
 import com.srainbow.leisureten.widget.RectangleImageView;
 
 import java.util.List;

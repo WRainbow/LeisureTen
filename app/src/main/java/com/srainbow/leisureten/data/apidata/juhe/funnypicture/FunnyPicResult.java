@@ -1,4 +1,4 @@
-package com.srainbow.leisureten.data.APIData;
+package com.srainbow.leisureten.data.apidata.juhe.funnypicture;
 
 import java.util.List;
 

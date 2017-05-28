@@ -16,7 +16,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.srainbow.leisureten.data.BaseData.MusicDetail;
+import com.srainbow.leisureten.data.basedata.MusicDetail;
 import com.srainbow.leisureten.util.BaseUtil;
 import com.srainbow.leisureten.util.Constant;
 

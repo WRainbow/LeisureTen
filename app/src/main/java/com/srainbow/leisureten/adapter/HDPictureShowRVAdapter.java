@@ -12,10 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.srainbow.leisureten.R;
-import com.srainbow.leisureten.custom.interfaces.OnItemClickListener;
-import com.srainbow.leisureten.custom.interfaces.OnItemWithParamClickListener;
 import com.srainbow.leisureten.custom.interfaces.OnItemWithParamViewClickListener;
-import com.srainbow.leisureten.data.APIData.ImgWithAuthor;
+import com.srainbow.leisureten.data.jsoupdata.ImgWithAuthor;
 
 import java.util.List;
 

@@ -1,18 +1,19 @@
-package com.srainbow.leisureten.data.APIData;
+package com.srainbow.leisureten.data.apidata.juhe.funnypicture;
 
 import java.util.List;
 
 /**
  * Created by SRainbow on 2016/10/10.
  */
-public class RandomJokeData {
+public class RandomFunnyPicData {
 
     //返回值
     public String reason;
 
     //返回结果
-    public List<JokeDetail> result;
+    public List<FunnyPicDetail> result;
 
     //错误代码
     public String error_code;
+
 }

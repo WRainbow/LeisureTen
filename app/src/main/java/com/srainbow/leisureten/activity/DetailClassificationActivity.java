@@ -6,15 +6,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.srainbow.leisureten.R;
 import com.srainbow.leisureten.adapter.MyViewPagerAdapter;
-import com.srainbow.leisureten.data.APIData.showapi.picture_classification.Classification;
-import com.srainbow.leisureten.data.APIData.showapi.picture_classification.ClassificationDetail;
-import com.srainbow.leisureten.data.APIData.showapi.picture_classification.PictureClassificationResult;
-import com.srainbow.leisureten.data.APIData.showapi.picture_classification.PictureClassificationResultBody;
+import com.srainbow.leisureten.data.apidata.showapi.picture_classification.Classification;
+import com.srainbow.leisureten.data.apidata.showapi.picture_classification.ClassificationDetail;
+import com.srainbow.leisureten.data.apidata.showapi.picture_classification.PictureClassificationResult;
+import com.srainbow.leisureten.data.apidata.showapi.picture_classification.PictureClassificationResultBody;
 import com.srainbow.leisureten.netRequest.RetrofitThing;
 import com.srainbow.leisureten.netRequest.reWriteWay.SubscriberByTag;
 

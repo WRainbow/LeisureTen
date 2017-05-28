@@ -2,12 +2,10 @@ package com.srainbow.leisureten.netRequest;
 
 
 import com.google.gson.Gson;
-import com.srainbow.leisureten.data.APIData.FunnyPicData;
-import com.srainbow.leisureten.data.APIData.JokeData;
-import com.srainbow.leisureten.data.APIData.showapi.picture_classification.PictureClassificationResult;
-import com.srainbow.leisureten.data.APIData.showapi.picture_query.PictureQueryResult;
-
-import org.json.JSONObject;
+import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicData;
+import com.srainbow.leisureten.data.apidata.juhe.joke.JokeData;
+import com.srainbow.leisureten.data.apidata.showapi.picture_classification.PictureClassificationResult;
+import com.srainbow.leisureten.data.apidata.showapi.picture_query.PictureQueryResult;
 
 import retrofit2.http.GET;
 import retrofit2.http.POST;
