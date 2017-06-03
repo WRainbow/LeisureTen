@@ -17,6 +17,7 @@ import com.srainbow.leisureten.util.BaseUtil;
 import com.srainbow.leisureten.util.Constant;
 import com.srainbow.leisureten.util.IdentifyingCode;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -123,21 +124,26 @@ public class RegisterActivity extends BaseActivityWithInstance implements View.O
     }
 
     @Override
-    public void result(JSONObject result, int tag) {
-        if (result != null) {
-            switch (tag){
-                case Constant.REGISTER_TAG:
-                    if ("true".equals(result.optString("result"))) {
-                        showMessageByString("注册成功");
-                        RegisterActivity.this.finish();
-                    } else if ("用户名已存在".equals(result.optString("result"))) {
-                        showMessageByString("用户名已存在");
-                    } else if ("false".equals(result.optString("result"))) {
-                        showMessageByString("注册失败");
-                    } else {
-                        showMessageByString("未知错误");
-                    }
-                    break;
+    public void result(Object object, int tag) {
+        if (object != null) {
+            try{
+                JSONObject result = new JSONObject((String)object);
+                switch (tag){
+                    case Constant.REGISTER_TAG:
+                        if ("true".equals(result.optString("result"))) {
+                            showMessageByString("注册成功");
+                            RegisterActivity.this.finish();
+                        } else if ("用户名已存在".equals(result.optString("result"))) {
+                            showMessageByString("用户名已存在");
+                        } else if ("false".equals(result.optString("result"))) {
+                            showMessageByString("注册失败");
+                        } else {
+                            showMessageByString("未知错误");
+                        }
+                        break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         } else {
             showMessageByString("网络错误");

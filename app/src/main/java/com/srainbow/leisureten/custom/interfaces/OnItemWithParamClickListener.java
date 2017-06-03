@@ -9,5 +9,6 @@ import java.util.List;
  */
 
 public interface OnItemWithParamClickListener {
-    void onItemWithParamClick(View v, Object o);
+    void onItemWithParamClick(View v, Object...objects);
+    void onItemWithParamLongClick(View v, Object...objects);
 }

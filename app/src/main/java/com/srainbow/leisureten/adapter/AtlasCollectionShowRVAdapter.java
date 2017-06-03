@@ -2,7 +2,6 @@ package com.srainbow.leisureten.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +26,12 @@ import butterknife.ButterKnife;
  * Created by SRainbow mItemWithParamClickListener 2017/4/19.
  */
 
-public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.BeautifulHolder> implements View.OnClickListener{
+public class AtlasCollectionShowRVAdapter extends RecyclerView.Adapter<AtlasCollectionShowRVAdapter.BeautifulHolder> implements View.OnClickListener{
 
     private Context mContext;
     private OnItemWithParamViewClickListener mItemWithParamViewClickListener;
     private List<PictureContent> pictureContentList;
-    public BeautifulRVAdapter(Context context, List<PictureContent> list) {
+    public AtlasCollectionShowRVAdapter(Context context, List<PictureContent> list) {
         this.mContext = context;
         this.pictureContentList = list;
     }
@@ -53,17 +52,13 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
         holder.mTvDescription.setText(pictureContentList.get(position).getTitle());
         //设置进入图集布局的tag
         holder.mLlayoutInAtlas.setTag(R.id.dataTag, pictureContentList.get(position));
-        //设置收藏按钮的tag
-        holder.mIvCollection.setTag(R.id.dataTag, pictureContentList.get(position));
-        holder.mIvCollection.setTag(R.id.viewTag, holder.mIvCollectionDown);
         //设置下载按钮的tag
         holder.mIvDownLoad.setTag(R.id.dataTag, pictureContentList.get(position));
         //设置取消收藏按钮的tag
         holder.mIvCollectionDown.setTag(R.id.dataTag, pictureContentList.get(position));
-        holder.mIvCollectionDown.setTag(R.id.viewTag, holder.mIvCollection);
+        holder.mIvCollectionDown.setTag(R.id.dataTag2, position);
         //设置监听器
         holder.mLlayoutInAtlas.setOnClickListener(this);
-        holder.mIvCollection.setOnClickListener(this);
         holder.mIvDownLoad.setOnClickListener(this);
         holder.mIvCollectionDown.setOnClickListener(this);
 
@@ -81,16 +76,12 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
                 case R.id.beautiful_base_in_llayout:
                     mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag), null);
                     break;
-                case R.id.layout_collection_iv:
-                    mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag),
-                            (ImageView)v.getTag(R.id.viewTag));
-                    break;
                 case R.id.layout_download_iv:
                     mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag), null);
                     break;
                 case R.id.layout_collection_down_iv:
-                    mItemWithParamViewClickListener.onItemWithParamViewClick(v, v.getTag(R.id.dataTag),
-                            (ImageView)v.getTag(R.id.viewTag));
+                    mItemWithParamViewClickListener.onItemWithParamPositionClick(v, v.getTag(R.id.dataTag),
+                            (int)v.getTag(R.id.dataTag2));
                     break;
             }
         }
@@ -116,8 +107,6 @@ public class BeautifulRVAdapter extends RecyclerView.Adapter<BeautifulRVAdapter.
         RelativeLayout mCollectionDownLoad;
         @Bind(R.id.layout_download_iv)
         ImageView mIvDownLoad;
-        @Bind(R.id.layout_collection_iv)
-        ImageView mIvCollection;
         @Bind(R.id.layout_collection_down_iv)
         ImageView mIvCollectionDown;
 

@@ -1,7 +1,10 @@
 <resources>
 
-    <item name="dataTag" type="id"/>
-    <item name="viewTag" type="id"/>
+    <item name="dataTag" type="id" />
+    <item name="dataTagString" type="id" />
+    <item name="dataTagId" type="id" />
+    <item name="dataTag2" type="id" />
+    <item name="viewTag" type="id" />
 
     <string name="app_name">休闲十分</string>
     <string name="HappyArea">开心十分</string>
@@ -51,6 +54,22 @@
     <string name="menuSetting">设置</string>
     <string name="menuAbout">关于</string>
     <string name="menuFeedBack">意见反馈</string>
+    <string name="jokeCollection">笑话收藏</string>
+    <string name="pictureCollection">图片收藏</string>
+    <string name="atlasCollection">图集收藏</string>
+
+    <string name="newList">新建歌单</string>
+    <string name="toCreateList">您还没有歌单，点击新建歌单进行创建</string>
+    <string name="tips">点击歌曲即可%1$s</string>
+    <string name="musicMenuName">歌单名称：</string>
+    <string name="musicMenuNameHint">请输入歌单名称</string>
+    <string name="okButton">确定</string>
+    <string name="addButton">添加</string>
+    <string name="removeButton">删除</string>
+    <string name="addAll">添加全部</string>
+
+    <string name="settingMusicPlayPath">播放歌单</string>
+    <string name="settingMusicPlayOrder">播放顺序</string>
 
     <string-array name="jazzy_effects">
         <item>Standard</item>

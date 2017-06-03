@@ -33,12 +33,12 @@ public class BaseFragment extends Fragment {
     }
 
     public void saveUserNameToSP(Context context, String userName) {
-        SharedPreferences sp = context.getSharedPreferences(Constant.SharedPreferencesName, MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(Constant.SP_USERNAME_NAME, MODE_PRIVATE);
         sp.edit().putString("userName", userName).apply();
     }
 
     public String getUserNameFromSP(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Constant.SharedPreferencesName, MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(Constant.SP_USERNAME_NAME, MODE_PRIVATE);
         return sp.getString("userName", "null");
     }
 }

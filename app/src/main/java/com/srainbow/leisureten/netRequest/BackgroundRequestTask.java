@@ -27,7 +27,6 @@ public class BackgroundRequestTask extends AsyncTask<String, Integer, String> {
 
     private OnResponseListener onResponseListener;
     private int tag;
-    private JSONObject resultJson;
     private StringBuilder requestString = new StringBuilder();
 
     public BackgroundRequestTask(OnResponseListener listener, int tag){
@@ -98,12 +97,11 @@ public class BackgroundRequestTask extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        try {
-            resultJson = new JSONObject(result);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if ("请求错误".equals(result)) {
+            onResponseListener.result(null, tag);
+        } else {
+            onResponseListener.result(result, tag);
         }
-        onResponseListener.result(resultJson, tag);
 
     }
 }

@@ -19,6 +19,7 @@ import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.util.Constant;
 import com.srainbow.leisureten.util.HtmlParserWithJSoup;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -241,29 +242,39 @@ public class HDPictureShowActivity extends BaseActivity implements OnClickListen
     }
 
     @Override
-    public void result(JSONObject result, int tag) {
-        if (result != null) {
-            switch (tag) {
-                case Constant.PICTURE_COLLECTION_TAG:
-                    if ("true".equals(result.optString("result"))) {
-                        showMessageByString("收藏成功");
-                        showAndHideView(showV, hideV);
-                    } else if ("false".equals(result.optString("result"))) {
-                        showMessageByString("收藏失败");
-                    } else {
-                        showMessageByString("未知错误");
-                    }
-                    break;
-                case Constant.PICTURE_COLLECTION_CANCEL_TAG:
-                    if ("true".equals(result.optString("result"))) {
-                        showMessageByString("取消收藏成功");
-                        showAndHideView(showV, hideV);
-                    }  else if ("false".equals(result.optString("result"))) {
-                        showMessageByString("取消收藏失败");
-                    } else {
-                        showMessageByString("未知错误");
-                    }
-                    break;
+    public void onItemWithParamPositionClick(View v, Object o, int position) {
+
+    }
+
+    @Override
+    public void result(Object object, int tag) {
+        if (object != null) {
+            try{
+                JSONObject result = new JSONObject((String)object);
+                switch (tag) {
+                    case Constant.PICTURE_COLLECTION_TAG:
+                        if ("true".equals(result.optString("result"))) {
+                            showMessageByString("收藏成功");
+                            showAndHideView(showV, hideV);
+                        } else if ("false".equals(result.optString("result"))) {
+                            showMessageByString("收藏失败");
+                        } else {
+                            showMessageByString("未知错误");
+                        }
+                        break;
+                    case Constant.PICTURE_COLLECTION_CANCEL_TAG:
+                        if ("true".equals(result.optString("result"))) {
+                            showMessageByString("取消收藏成功");
+                            showAndHideView(showV, hideV);
+                        }  else if ("false".equals(result.optString("result"))) {
+                            showMessageByString("取消收藏失败");
+                        } else {
+                            showMessageByString("未知错误");
+                        }
+                        break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         } else {
             showMessageByString("网络错误");

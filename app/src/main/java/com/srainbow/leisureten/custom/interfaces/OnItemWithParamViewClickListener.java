@@ -8,4 +8,5 @@ import android.view.View;
 
 public interface OnItemWithParamViewClickListener {
     void onItemWithParamViewClick(View v, Object o, View anther);
+    void onItemWithParamPositionClick(View v, Object o, int position);
 }

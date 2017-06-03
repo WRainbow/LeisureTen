@@ -74,7 +74,7 @@ public class BackGroundRequest {
             atlasObject.put("typeName", pictureContent.getTypeName());
             atlasObject.put("ct", pictureContent.getCt());
             atlasObject.put("title", pictureContent.getTitle());
-            atlasObject.put("itemId", pictureContent.getItemId());
+            atlasObject.put("type", pictureContent.getType());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -203,6 +203,27 @@ public class BackGroundRequest {
         task.setParam("method", "checkJoke");
         task.setParam("userName", userName);
         task.setParam("checkKey", detail.getHashId());
+        task.execute();
+    }
+
+    public void getJokeCollection(OnResponseListener listener, int tag, String userName){
+        BackgroundRequestTask task = new BackgroundRequestTask(listener, tag);
+        task.setParam("method", "getJokeCollection");
+        task.setParam("userName", userName);
+        task.execute();
+    }
+
+    public void getPictureCollection(OnResponseListener listener, int tag, String userName){
+        BackgroundRequestTask task = new BackgroundRequestTask(listener, tag);
+        task.setParam("method", "getPictureCollection");
+        task.setParam("userName", userName);
+        task.execute();
+    }
+
+    public void getAtlasCollection(OnResponseListener listener, int tag, String userName){
+        BackgroundRequestTask task = new BackgroundRequestTask(listener, tag);
+        task.setParam("method", "getAtlasCollection");
+        task.setParam("userName", userName);
         task.execute();
     }
 

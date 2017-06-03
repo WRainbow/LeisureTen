@@ -11,6 +11,8 @@ import com.srainbow.leisureten.util.Constant;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public static int musicPlay = Constant.PlayerMsg.PLAY_MSG;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +34,22 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void saveUserNameToSP(String userName) {
-        SharedPreferences sp = getSharedPreferences(Constant.SharedPreferencesName, MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(Constant.SP_USERNAME_NAME, MODE_PRIVATE);
         sp.edit().putString("userName", userName).apply();
     }
 
     public String getUserNameFromSP() {
-        SharedPreferences sp = getSharedPreferences(Constant.SharedPreferencesName, MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(Constant.SP_USERNAME_NAME, MODE_PRIVATE);
         return sp.getString("userName", "null");
+    }
+
+    public void saveSettingValueFromSP(String name, String key, String value) {
+        SharedPreferences sp = getSharedPreferences(name, MODE_PRIVATE);
+        sp.edit().putString(key, value).apply();
+    }
+
+    public String getSettingValueToSP(String name, String key) {
+        SharedPreferences sp = getSharedPreferences(name, MODE_PRIVATE);
+        return sp.getString(key, "null");
     }
 }

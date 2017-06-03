@@ -27,6 +27,7 @@ import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicData;
 import com.srainbow.leisureten.data.apidata.juhe.funnypicture.FunnyPicDetail;
 import com.srainbow.leisureten.util.Constant;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -187,31 +188,42 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
     }
 
     @Override
-    public void result(JSONObject result, int tag) {
-        if(result != null){
-            switch (tag){
-                case Constant.PICTURE_COLLECTION_TAG:
-                    if ("true".equals(result.optString("result"))) {
-                        showMessageByString("收藏成功");
-                        showAndHideView(showV, hideV);
-                    } else if ("false".equals(result.optString("result"))) {
-                        showMessageByString("收藏失败");
-                    } else {
-                        showMessageByString("未知错误");
+    public void onItemWithParamPositionClick(View v, Object o, int position) {
 
-                    }
-                    break;
-                case Constant.PICTURE_COLLECTION_CANCEL_TAG:
-                    if ("true".equals(result.optString("result"))) {
-                        showMessageByString("取消收藏成功");
-                        showAndHideView(showV, hideV);
-                    } else if ("false".equals(result.optString("result"))) {
-                        showMessageByString("取消收藏失败");
-                    } else {
-                        showMessageByString("未知错误");
-                    }
-                    break;
+    }
+
+    @Override
+    public void result(Object object, int tag) {
+        if(object != null){
+            try {
+                JSONObject result = new JSONObject((String)object);
+                switch (tag){
+                    case Constant.PICTURE_COLLECTION_TAG:
+                        if ("true".equals(result.optString("result"))) {
+                            showMessageByString("收藏成功");
+                            showAndHideView(showV, hideV);
+                        } else if ("false".equals(result.optString("result"))) {
+                            showMessageByString("收藏失败");
+                        } else {
+                            showMessageByString("未知错误");
+
+                        }
+                        break;
+                    case Constant.PICTURE_COLLECTION_CANCEL_TAG:
+                        if ("true".equals(result.optString("result"))) {
+                            showMessageByString("取消收藏成功");
+                            showAndHideView(showV, hideV);
+                        } else if ("false".equals(result.optString("result"))) {
+                            showMessageByString("取消收藏失败");
+                        } else {
+                            showMessageByString("未知错误");
+                        }
+                        break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
         } else {
             showMessageByString("网络错误");
         }
@@ -301,7 +313,7 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
                     Toast.makeText(getActivity(),"没有数据了",Toast.LENGTH_SHORT).show();
                 }else{
 
-                    //获取返回数据集合
+                    //新建数据集合
                     List<FunnyPicDetail> details = ((RandomFunnyPicData)o).result;
                     for(FunnyPicDetail detail : funnyPicDetails){
                         details.add(detail);
@@ -314,7 +326,7 @@ public class PictureFragment extends BaseFragment implements SubscriberByTag.onS
                     for(FunnyPicDetail detail : details){
                         funnyPicDetails.add(detail);
                     }
-
+                    Log.e("PictureListSize", funnyPicDetails.size() + "");
                 }
                 break;
         }

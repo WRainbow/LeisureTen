@@ -14,6 +14,7 @@ import com.srainbow.leisureten.custom.interfaces.OnResponseListener;
 import com.srainbow.leisureten.netRequest.BackGroundRequest;
 import com.srainbow.leisureten.util.Constant;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -33,7 +34,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Bind(R.id.login_tb)
     Toolbar mTbLogin;
 
-    private Gson result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,24 +87,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public void result(JSONObject result, int tag) {
-        switch (tag){
-            case Constant.LOGIN_TAG:
-                if (result != null) {
-                    if ("true".equals(result.optString("result"))) {
-                        saveUserNameToSP(mEtUsername.getText().toString());
-                        showMessageByString("登录成功");
-                        Intent intent = new Intent();
-                        intent.putExtra("userName", mEtUsername.getText().toString());
-                        setResult(RESULT_OK, intent);
-                        LoginActivity.this.finish();
-                    } else {
-                        showMessageByString("用户名或密码错误");
-                    }
-                } else {
-                    showMessageByString("网络错误");
+    public void result(Object object, int tag) {
+        if(null != object) {
+            try{
+                JSONObject result = new JSONObject((String)object);
+                switch (tag){
+                    case Constant.LOGIN_TAG:
+                        if ("true".equals(result.optString("result"))) {
+                            saveUserNameToSP(mEtUsername.getText().toString());
+                            showMessageByString("登录成功");
+                            Intent intent = new Intent();
+                            intent.putExtra("userName", mEtUsername.getText().toString());
+                            setResult(RESULT_OK, intent);
+                            LoginActivity.this.finish();
+                        } else {
+                            showMessageByString("用户名或密码错误");
+                        }
+                        break;
                 }
-                break;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            showMessageByString("网络错误");
         }
     }
 }

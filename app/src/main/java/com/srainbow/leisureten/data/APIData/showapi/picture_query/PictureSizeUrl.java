@@ -15,6 +15,8 @@ public class PictureSizeUrl {
     //中图地址
     private String middle;
 
+    public PictureSizeUrl() {}
+
     public PictureSizeUrl(String big, String small, String middle) {
         this.big = big;
         this.small = small;

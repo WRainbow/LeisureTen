@@ -7,5 +7,5 @@ import org.json.JSONObject;
  */
 
 public interface OnResponseListener {
-    void result(JSONObject result, int tag);
+    void result(Object object, int tag);
 }

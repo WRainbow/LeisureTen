@@ -26,6 +26,8 @@ public class PictureContent {
     //更新时间
     private String ct;
 
+    public PictureContent() {}
+
     public PictureContent(String typeName, String title, List<PictureSizeUrl> list, String itemId, String type, String ct) {
         this.typeName = typeName;
         this.title = title;
